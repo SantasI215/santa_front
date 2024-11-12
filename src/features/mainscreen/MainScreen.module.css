@@ -1,0 +1,35 @@
+.homescreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('../../assets/img/bg.jpg');
+    background-position: center;
+    position: relative;
+}
+
+.overlay {
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #ffffff;
+    opacity: 0.8;
+    margin: 0;
+}
+
+.title {
+    font-size: 3em;
+    font-weight: bold;
+    margin: 0;
+    color: #ffffff;
+}
+
+.description {
+    font-size: 1.1em;
+    color: #d1d5db;
+    margin-top: 10px;
+}
