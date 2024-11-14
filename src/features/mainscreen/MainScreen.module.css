@@ -1,13 +1,18 @@
 .homescreen {
+    /* background-image: url('../../assets/img/sharik.png');
+    background-image: url('../../assets/img/lenta.png'); */
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.container{
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: url('../../assets/img/bg.jpg');
+    background-color: #A01616;
     background-position: center;
     position: relative;
 }
-
 .overlay {
     text-align: center;
 }
@@ -22,14 +27,31 @@
 }
 
 .title {
-    font-size: 3em;
+    font-size: 64px;
     font-weight: bold;
     margin: 0;
-    color: #ffffff;
+    color: #CCB75E;
+    font-family: "Lobster", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .description {
-    font-size: 1.1em;
+    font-size: 24px;
     color: #d1d5db;
     margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.buttonMain{
+    color: #CCB75E;
+    margin: 0 auto;
+    background-color: #01553B;
+    padding: 15px;
+    display: block;
+    width: 175px;
+    font-family: "Lobster", sans-serif;
+    font-size: 24px;
+    margin-top: 10px;
+    border-radius: 0px 35px 0px 35px;
 }

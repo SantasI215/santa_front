@@ -5,7 +5,9 @@ export default function Header() {
         <header style={headerStyle}>
             <nav style={navStyle}>
                 <a href="/" style={linkStyle}>Главная</a>
-                <a href="/gifts" style={linkStyle}>Подарки</a>
+                <a href="/gifts" style={linkStyle}>О нас</a>
+                <a href="/catalog" style={linkStyle}>Каталог</a>
+                <a href="/contacts" style={linkStyle}>Контакты</a>
                 <a href="/auth/register" style={linkStyle}>Регистрация</a>
                 <a href="/auth/login" style={linkStyle}>Авторизация</a>
             </nav>
@@ -18,7 +20,7 @@ const headerStyle = {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '20px',
-    backgroundColor: '#1e3a8a', // темно-синий фон
+    backgroundColor: '#A01616',
 };
 
 const navStyle = {
@@ -27,7 +29,7 @@ const navStyle = {
 };
 
 const linkStyle = {
-    color: '#fff', // белый текст
+    color: '#fff',
     textDecoration: 'none',
     fontSize: '1.2em',
     fontWeight: 'bold',
