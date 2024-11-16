@@ -7,7 +7,7 @@ export default function HomePage() {
     return (
         <>
             <Head>
-                <title>Моё портфолио | Вход</title>
+                <title>Тайный Санта | Вход</title>
                 <meta name="description" content="" />
             </Head>
             <MainLayout>

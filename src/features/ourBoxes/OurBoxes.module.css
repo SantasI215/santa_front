@@ -1,0 +1,25 @@
+.ourBoxesContent {
+    padding-top: var(--spacing);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--spacing);
+}
+
+.ourBoxesItem {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: var(--radius);
+    border: 3px solid var(--accent);
+    padding: 20px;
+    align-items: center;
+}
+
+.ourBoxesItem p {
+    font-size: 32px;
+    font-family: "Lobster", sans-serif;
+    font-weight: 400;
+    text-align: center;
+    color: var(--main);
+}
