@@ -66,6 +66,7 @@ export default function BoxDetail() {
                                     box.items.map((item) => (
                                         <li key={item.id}>
                                             {item.name} - {item.pivot.quantity}шт.
+                                            <strong> Категория:</strong> {item.category ? item.category.name : 'Без категории'}
                                         </li>
                                     ))
                                 ) : (
