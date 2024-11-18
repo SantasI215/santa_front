@@ -4,6 +4,7 @@ import config from "@/pages/api/config";
 import styles from './OurBoxesNew.module.css'
 import Box from '@/assets/img/Box.png'
 import Image from "next/image";
+import Link from "next/link";
 
 export default function OurBoxesNew() {
     const [boxes, setBoxes] = useState([]);
@@ -41,10 +42,14 @@ export default function OurBoxesNew() {
                 <h2>Новые боксы</h2>
                 <ul className={styles.ourBoxesNewContent}>
                     {boxes.map(box => (
-                        <li key={box.id} className={styles.ourBoxesNewItem}>
-                            <Image src={Box} alt={box.name} />
-                            <p>{box.name}</p>
-                            <h3>{box.price} ₽</h3>
+                        <li key={box.id}>
+                            <Link href={`/boxes/${box.id}`}>
+                                <div className={styles.ourBoxesNewItem}>
+                                    <Image src={Box} alt={box.name} />
+                                    <p>{box.name}</p>
+                                    <h3>{box.price} ₽</h3>
+                                </div>
+                            </Link>
                         </li>
                     ))}
                 </ul>

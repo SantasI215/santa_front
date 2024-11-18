@@ -1,0 +1,31 @@
+.boxDetailImage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.boxDetailContent {
+    margin-top: var(--spacing);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing);
+}
+
+.boxDetailText {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    align-items: flex-start;
+}
+
+.boxDetailTextContent {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 4);
+}
+
+.boxDetailTextContent ul li {
+    margin-left: var(--spacing);
+    list-style: square;
+}

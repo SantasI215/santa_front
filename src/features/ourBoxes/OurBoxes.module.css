@@ -15,6 +15,14 @@
     padding: 20px;
     align-items: center;
 }
+.ourBoxesItem:hover img {
+    filter: drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.2));
+    transition: var(--transition);
+}
+
+.ourBoxesItem img {
+    transition: var(--transition);
+}
 
 .ourBoxesItem p {
     font-size: 32px;

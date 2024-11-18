@@ -14,6 +14,15 @@
     border: 3px solid var(--accent);
     padding: 20px;
     align-items: center;
+    transition: var(--transition);
+}
+.ourBoxesNewItem:hover img {
+    filter: drop-shadow(8px 8px 6px rgba(0, 0, 0, 0.2));
+    transition: var(--transition);
+}
+
+.ourBoxesNewItem img {
+    transition: var(--transition);
 }
 
 .ourBoxesNewItem p {

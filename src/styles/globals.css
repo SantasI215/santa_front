@@ -156,6 +156,10 @@ header {
   padding: var(--distance) 0;
 }
 
+.box-detail {
+  padding-top: var(--header);
+}
+
 .btn {
   cursor: pointer;
   background: var(--main);
