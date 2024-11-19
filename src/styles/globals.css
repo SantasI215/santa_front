@@ -1,71 +1,241 @@
-@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
 :root {
   --white: #ffffff;
-  --white-light: #F7F9FB;
+  --background: #FBEFE3;
   --black: #000000;
-  --gray: #9F9F9F;
-  --gray-hover: #717171;
-  --accent: #0769E0;
-  --accent-hover: #073c7e;
+  --main: #BF8845;
+  --main-hover: #dda86c;
+  --accent: #124333;
 
-  --spacing: 20px;
-  --distance: 40px;
+  --spacing: 40px;
+  --distance: 60px;
 
   --radius: 20px;
 
   --transition: all .5s ease-in-out;
 
   /* Размер фиксированной шапки */
-  --header: 84px;
+  --header: 80px;
   /* Размер фиксированной шапки */
 }
+
 @media (max-width: 500px) {
   :root {
-    --spacing: 15px;
-    --distance: 20px;
+    --spacing: 20px;
+    --distance: 30px;
   }
 }
 
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--white);
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 20px;
-  background-color: var(--accent);
+  border-radius: var(--radius);
+  background-color: var(--main);
 }
 
 ::selection {
-  background: var(--accent);/* Safari */
+  background: var(--background);
+  /* Safari */
 }
+
 ::-moz-selection {
-  background: var(--accent); /* Firefox */
+  background: var(--background);
+  /* Firefox */
 }
 
 @media (max-width: 768px) {
-  ::-webkit-scrollbar, ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb  {
+
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-thumb {
     display: none;
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
-  max-width: 1920px;
   margin: 0 auto;
   overflow-x: hidden;
 }
 
 body {
-  background: var(--white);
-  font-family: "Zen Maru Gothic", sans-serif;
+  background: var(--background);
+  font-family: "Mulish", sans-serif;
   font-weight: 400;
-  color: var(--black);
+  color: var(--main);
   font-style: normal;
-  font-size: 20px;
+  font-size: 24px;
+}
+
+.container {
+  position: relative;
+  margin: 0 200px;
+}
+
+@media (min-width: 2200px) {
+  .container {
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+}
+
+h1 {
+  font-size: 72px;
+  font-family: "Lobster", sans-serif;
+  font-weight: 400;
+}
+
+h2 {
+  font-size: 48px;
+  font-family: "Lobster", sans-serif;
+  font-weight: 400;
+  text-align: center;
+  margin-top: var(--distance);
+}
+
+h3 {
+  font-size: 36px;
+  font-family: "Lobster", sans-serif;
+  font-weight: 400;
+  color: var(--accent);
+  text-align: center;
+}
+
+h4 {
+  font-size: 32px;
+  font-family: "Mulish", sans-serif;
+  font-weight: 400;
+  color: var(--background);
+}
+
+.banner-bg {
+  background-image: url("../assets/img/Background.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.banner {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--distance);
+}
+
+header {
+  position: fixed;
+  width: 100%;
+  top: calc(var(--spacing) / 2);
+  z-index: 2;
+}
+
+.header {
+  padding: calc(var(--spacing) / 2);
+  background: rgba(191, 136, 69, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: var(--radius);
+}
+
+.our-boxes {
+  padding-top: var(--header);
+}
+
+.create-box {
+  margin-top: var(--distance);
+  background: var(--accent);
+  padding: var(--distance) 0;
+}
+
+.box-detail {
+  padding-top: var(--header);
+}
+
+.btn {
+  cursor: pointer;
+  background: var(--main);
+  color: var(--background);
+  padding: 10px 50px;
+  border: none;
+  font-size: 22px;
+  font-family: "Lobster", sans-serif;
+  font-weight: 400;
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.btn:hover {
+  background: var(--main-hover);
+}
+
+.btn-image {
+  cursor: pointer;
+  border: none;
+  background: none;
+  height: 40px;
+}
+
+.btn-text {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 24px;
+  color: var(--background);
+  font-family: "Mulish", sans-serif;
+  font-weight: 400;
+  transition: var(--transition);
+}
+
+.btn-text:hover {
+  color: var(--main-hover);
+}
+
+/* Стили для блока с загрузкой */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.loading::after {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 4px solid #ccc;
+  border-top: 4px solid #124333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Анимация вращения */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

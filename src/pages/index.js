@@ -1,5 +1,9 @@
 import MainLayout from "@/layouts/main.layout"
 import Head from 'next/head';
+import Banner from "@/features/banner/Banner";
+import OurBoxesNew from "@/features/ourBoxesNew/OurBoxesNew";
+import CreateBox from "@/features/createBox/CreateBox";
+import Footer from '@/features/footer/Footer';
 
 export default function HomePage() {
 
@@ -10,7 +14,10 @@ export default function HomePage() {
           <meta name="description" content="" />
         </Head>
         <MainLayout>
-            <p>Hello World</p>
+            <Banner />
+            <OurBoxesNew />
+            <CreateBox />
+            <Footer />
         </MainLayout>
       </>
   )

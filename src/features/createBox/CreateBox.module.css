@@ -1,0 +1,12 @@
+.createBoxContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.createBoxContent {
+    font-size: 48px;
+    font-family: "Lobster", sans-serif;
+    font-weight: 400;
+    color: var(--main);
+}
