@@ -14,7 +14,7 @@ export default function Header() {
                     <div className={styles.headerButtonContent}>
                         <NavButton label="Наши боксы" path="/our-boxes" />
                         <NavButton label="Конфигуратор" path="/configurator" />
-                        <a className="btn-text" href="#contacts">Контакты</a>
+                        <NavButton label="Контакты" path="/contact" />
                     </div>
                     <div className={styles.headerButtonContent}>
                         <NavButton icon={Cart} path="/cart" type="image" />

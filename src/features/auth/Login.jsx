@@ -1,12 +1,13 @@
+// pages/auth/login.js
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Cookies from 'js-cookie';
 
 import styles from './Auth.module.css';
-import Image from "next/image";
 import config from "@/pages/api/config";
 
-export default function Register() {
+export default function Login() {
     const router = useRouter();
     const [formData, setFormData] = useState({
         email: '',
@@ -24,15 +25,22 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
+    
         try {
             const response = await axios.post(`${config.apiUrl}/login`, formData, {
                 headers: { 'Content-Type': 'application/json' },
             });
-
-            localStorage.setItem('token', response.data.token);
+    
+          
+            Cookies.set('token', response.data.token, { expires: 7 }); 
             alert('Успешный вход!');
-            router.push('/');
+
+            
+            if (response.data.user.role === 'admin') {
+                router.push('/admin/dashboard');  
+            } else {
+                router.push('/profile');  
+            }
         } catch (err) {
             if (err.response && err.response.status === 401) {
                 setError('Неправильный email или пароль');
@@ -44,7 +52,7 @@ export default function Register() {
 
     const logIn = () => {
         router.push("/auth/register");
-    }
+    };
 
     return (
         <div className="register container">
@@ -66,14 +74,14 @@ export default function Register() {
                             placeholder="Пароль"
                             required
                         />
-                        <button type="submit" className="auth-button">Вход</button>
+                        <button type="submit" className="btn">Вход</button>
                     </form>
                     <div className={styles.authButtonSwap}>
-                        <button onClick={logIn} className="text-button">Или регистрация</button>
+                        <button onClick={logIn} className="btn">Или регистрация</button>
                     </div>
-                    {error && <p style={{color: 'red'}}>{error}</p>}
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
                 </div>
             </div>
         </div>
-    )
+    );
 }

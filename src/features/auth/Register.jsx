@@ -10,7 +10,6 @@ import config from '@/pages/api/config';
 export default function Register() {
     const router = useRouter();
     const [formData, setFormData] = useState({
-        username: '',
         name: '',
         email: '',
         password: '',
@@ -57,14 +56,6 @@ export default function Register() {
                         <h2>Регистрация</h2>
                         <input
                             type="text"
-                            name="username"
-                            onChange={handleChange}
-                            placeholder="Имя пользователя"
-                            required
-                        />
-                        {errors.username && <p style={{ color: 'red' }}>{errors.username[0]}</p>}
-                        <input
-                            type="text"
                             name="name"
                             onChange={handleChange}
                             placeholder="Имя"
@@ -95,10 +86,10 @@ export default function Register() {
                             required
                         />
                         {errors.password_confirmation && <p style={{ color: 'red' }}>{errors.password_confirmation[0]}</p>}
-                        <button type="submit" className="auth-button">Регистрация</button>
+                        <button type="submit" className="btn">Регистрация</button>
                     </form>
                     <div className={styles.authButtonSwap}>
-                        <button onClick={logIn} className="text-button">Или вход</button>
+                        <button onClick={logIn} className="btn">Или вход</button>
                     </div>
                     {errors.general && (
                         <div style={{color: 'red', marginTop: '10px' }}>

@@ -5,6 +5,7 @@ import config from "@/pages/api/config";
 import styles from './BoxDetail.module.css'
 import Image from "next/image";
 import Box from '@/assets/img/Box.png'
+import Preloader from "@/components/Preloader";
 
 export default function BoxDetail() {
     const [box, setBox] = useState(null);
@@ -31,7 +32,7 @@ export default function BoxDetail() {
     }, [id]);
 
     if (loading) {
-        return <div>Загрузка...</div>;
+        return <Preloader />;
     }
 
     if (error) {

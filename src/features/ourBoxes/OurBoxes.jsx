@@ -5,6 +5,7 @@ import styles from './OurBoxes.module.css'
 import Box from '@/assets/img/Box.png'
 import Image from "next/image";
 import Link from "next/link";
+import Preloader from "@/components/Preloader";
 
 export default function OurBoxes() {
     const [boxes, setBoxes] = useState([]);
@@ -29,7 +30,7 @@ export default function OurBoxes() {
     }, []);
 
     if (loading) {
-        return <div>Загрузка...</div>;
+        return <Preloader />;
     }
 
     if (error) {
@@ -48,6 +49,7 @@ export default function OurBoxes() {
                                     <Image src={Box} alt={box.name} />
                                     <p>{box.name}</p>
                                     <h3>{box.price} ₽</h3>
+                                    <a href="#our-boxes" className="btn">Купить</a>
                                 </div>
                             </Link>
                         </li>

@@ -24,34 +24,26 @@
 .authContent h2, .authButtonSwap {
     text-align: center;
 }
-
-.authImage {
-    border-radius: var(--radius);
-    height: 100%;
-    background-image: url("../../assets/img/AuthImage.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    color: var(--white);
-    padding: var(--distance);
+.authForm input {
+    width: 100%;
+    max-width: 400px; 
+    padding: 15px; 
+    font-size: 16px; 
+    border: 2px solid #ddd;
+    border-radius: 8px; 
+    margin-bottom: 15px;
+    box-sizing: border-box; 
+    background-color: #f9f9f9; 
+    transition: border-color 0.3s ease; 
 }
 
-.authImage img {
-    height: 200px;
-    width: 200px;
+.authForm input:focus {
+    border-color: #BF8845; 
+    outline: none;
+    background-color: #fff; 
 }
-
 @media (max-width: 600px) {
     .authContent {
         grid-template-columns: 1fr;
-    }
-    .authImage {
-        display: none;
     }
 }

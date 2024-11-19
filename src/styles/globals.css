@@ -20,6 +20,7 @@
   --header: 80px;
   /* Размер фиксированной шапки */
 }
+
 @media (max-width: 500px) {
   :root {
     --spacing: 20px;
@@ -42,14 +43,20 @@
 }
 
 ::selection {
-  background: var(--background);/* Safari */
+  background: var(--background);
+  /* Safari */
 }
+
 ::-moz-selection {
-  background: var(--background); /* Firefox */
+  background: var(--background);
+  /* Firefox */
 }
 
 @media (max-width: 768px) {
-  ::-webkit-scrollbar, ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb  {
+
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-thumb {
     display: none;
   }
 }
@@ -77,6 +84,7 @@ body {
   position: relative;
   margin: 0 200px;
 }
+
 @media (min-width: 2200px) {
   .container {
     max-width: 1920px;
@@ -164,14 +172,15 @@ header {
   cursor: pointer;
   background: var(--main);
   color: var(--background);
-  padding: 10px 60px;
+  padding: 10px 50px;
   border: none;
-  font-size: 24px;
+  font-size: 22px;
   font-family: "Lobster", sans-serif;
   font-weight: 400;
   border-radius: var(--radius);
   transition: var(--transition);
 }
+
 .btn:hover {
   background: var(--main-hover);
 }
@@ -193,6 +202,40 @@ header {
   font-weight: 400;
   transition: var(--transition);
 }
+
 .btn-text:hover {
   color: var(--main-hover);
+}
+
+/* Стили для блока с загрузкой */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.loading::after {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 4px solid #ccc;
+  border-top: 4px solid #124333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Анимация вращения */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
