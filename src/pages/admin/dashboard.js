@@ -18,28 +18,20 @@ const Dashboard = () => {
     };
 
     const deleteUser = async (id) => {
-        const token = Cookies.get('token');
-
-        if (!token) {
-            console.error('No token found');
-            return;
-        }
-
         try {
-            const response = await axios.post(`${config.apiUrl}/admin/users/${id}/delete`, {
-                _method: 'DELETE', // Laravel интерпретирует это как DELETE
-            }, {
+            const response = await axios.delete(`${config.apiUrl}/admin/users/${id}/delete`, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${Cookies.get('token')}`,
                 },
             });
-
+    
             console.log('User deleted:', response.data);
+            setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
         } catch (error) {
             console.error('Error deleting user:', error.response || error.message);
         }
     };
-    
+
     useEffect(() => {
         const fetchData = async () => {
             const token = Cookies.get('token');
@@ -102,6 +94,7 @@ const Dashboard = () => {
                 <table className={styles.usersTable}>
                     <thead>
                         <tr>
+
                             <th>Имя</th>
                             <th>Почта</th>
                             <th>Действия</th>
@@ -115,7 +108,11 @@ const Dashboard = () => {
                                 <td>{user.email}</td>
                                 <td>
                                     {!user.isAdmin && (
-                                        <button onClick={() => deleteUser(user.id)} className="btn">
+                                        <button
+                                            onClick={() => deleteUser(user.id)}
+                                            className="btn"
+                                            disabled={user.role === 'admin'} // Блокируем удаление администратора
+                                        >
                                             Удалить
                                         </button>
                                     )}
