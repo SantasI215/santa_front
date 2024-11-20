@@ -2,9 +2,9 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import axios from "axios";
 import config from "@/pages/api/config";
-import styles from './BoxDetail.module.css'
+import styles from './BoxDetail.module.css';
 import Image from "next/image";
-import Box from '@/assets/img/Box.png'
+import BoxImage from '@/assets/img/Box.png';
 import Preloader from "@/components/Preloader";
 
 export default function BoxDetail() {
@@ -49,36 +49,35 @@ export default function BoxDetail() {
                 <h2>{box.name}</h2>
                 <div className={styles.boxDetailContent}>
                     <div className={styles.boxDetailImage}>
-                        <Image src={Box} alt="" />
+                        <Image src={BoxImage} alt={box.name} />
                     </div>
                     <div className={styles.boxDetailText}>
                         <div className={styles.boxDetailTextContent}>
-                            <p>Описание:</p>
+                            <p><strong>Описание:</strong></p>
                             <p>{box.description}</p>
                         </div>
                         <div className={styles.boxDetailTextContent}>
-                            <p>Цена:</p>
+                            <p><strong>Цена:</strong></p>
                             <p>{box.price} ₽</p>
                         </div>
                         <div className={styles.boxDetailTextContent}>
-                            <p>Что внутри?</p>
+                            <p><strong>Что внутри:</strong></p>
                             <ul>
-                                {box.items && box.items.length > 0 ? (
-                                    box.items.map((item) => (
-                                        <li key={item.id}>
-                                            {item.name} - {item.pivot.quantity}шт.
-                                            <strong> Категория:</strong> {item.category ? item.category.name : 'Без категории'}
-                                        </li>
-                                    ))
-                                ) : (
-                                    <li>Нет товаров</li>
-                                )}
+                                {box.items.map(item => (
+                                    <li key={item.id}>
+                                        <p><strong>{item.name}</strong> - {item.pivot.quantity} шт.</p>
+                                        {item.categories && item.categories.length > 0 && (
+                                            <p>
+                                                Категории: {item.categories.map(category => category.name).join(', ')}
+                                            </p>
+                                        )}
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-    )
+    );
 }
