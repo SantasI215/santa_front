@@ -1,9 +1,9 @@
 import MainLayout from "@/layouts/main.layout"
 import Head from 'next/head';
 import Banner from "@/features/banner/Banner";
-import OurBoxesNew from "@/features/ourBoxesNew/OurBoxesNew";
 import CreateBox from "@/features/createBox/CreateBox";
 import Footer from '@/features/footer/Footer';
+import {OurBoxesNew} from "@/features/box/Box";
 
 export default function HomePage() {
 
@@ -17,7 +17,6 @@ export default function HomePage() {
             <Banner />
             <OurBoxesNew />
             <CreateBox />
-            <Footer />
         </MainLayout>
       </>
   )

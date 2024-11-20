@@ -35,10 +35,10 @@ export default function Footer() {
                     <ul className={styles.infoUl}>
 
                         <li>
-                            <h4>Наши Контакты</h4>
+                            <h4>Навигация По Сайту</h4>
                         </li>
                         <li>
-                            <NavButton label="Наши боксы" path="/banner" />
+                            <NavButton label="Регистрация" path="/auth/register" />
                         </li>
                         <li>
                             <NavButton label="Наши боксы" path="/our-boxes" />
