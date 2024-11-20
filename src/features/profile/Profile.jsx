@@ -43,6 +43,11 @@ export default function Profile() {
         fetchUserData();
     }, [router]);
 
+    const handleLogout = () => {
+        Cookies.remove('token'); // Удаление токена
+        router.push('/auth/login'); // Перенаправление на страницу логина
+    };
+
     if (loading) return <Preloader />;
     if (error) return <div>{error}</div>;
     if (!userData) return null;
@@ -55,6 +60,9 @@ export default function Profile() {
                         <h2>Профиль</h2>
                         <p>Ваше имя: {userData.name}</p>
                         <p>Ваша почта: {userData.email}</p>
+                        <button onClick={handleLogout} className="btn">
+                            Выйти
+                        </button>
                     </div>
                     <div className={styles.profileOrder}>
                         <h2>Заказы</h2>

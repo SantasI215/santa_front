@@ -1,0 +1,60 @@
+.dashboard {
+    padding: 10px;
+    background-color: #FBEFE3;
+}
+
+.profileInfo {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #BF8845;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+.ordersList {
+    padding: 15px;
+    border: 1px solid #BF8845;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+.usersList {
+    padding: 15px;
+    margin-top: 20px;
+    border: 1px solid #BF8845;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+.usersList h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #BF8845;
+    text-align: center;
+}
+
+.usersTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.usersTable th, .usersTable td {
+    padding: 5px;
+    text-align: left;
+    border: 1px solid #BF8845;
+}
+
+.usersTable th {
+    background-color: #BF8845;
+    color: #fff;
+}
+
+.usersTable tr:nth-child(even) {
+    background-color: #F7F7F7;
+}
+
+.usersTable tr:hover {
+    background-color: #E0E0E0;
+}
+
+
