@@ -1,6 +1,6 @@
 import MainLayout from "@/layouts/main.layout"
 import Head from 'next/head';
-import OurBoxes from "@/features/ourBoxes/OurBoxes";
+import {OurBoxes} from "@/features/box/Box";
 
 export default function HomePage() {
 

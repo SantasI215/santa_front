@@ -50,57 +50,62 @@ export default function Register() {
 
     return (
         <div className="register container">
-            <div className={styles.authContent}>
-                <div className={styles.authForm}>
-                    <form onSubmit={handleSubmit}>
-                        <h2>Регистрация</h2>
-                        <input
-                            type="text"
-                            name="name"
-                            onChange={handleChange}
-                            placeholder="Имя"
-                            required
-                        />
-                        {errors.name && <p style={{ color: 'red' }}>{errors.name[0]}</p>}
-                        <input
-                            type="email"
-                            name="email"
-                            onChange={handleChange}
-                            placeholder="Почта"
-                            required
-                        />
-                        {errors.email && <p style={{ color: 'red' }}>{errors.email[0]}</p>}
-                        <input
-                            type="password"
-                            name="password"
-                            onChange={handleChange}
-                            placeholder="Пароль"
-                            required
-                        />
-                        {errors.password && <p style={{ color: 'red' }}>{errors.password[0]}</p>}
-                        <input
-                            type="password"
-                            name="password_confirmation"
-                            onChange={handleChange}
-                            placeholder="Подтвердите пароль"
-                            required
-                        />
-                        {errors.password_confirmation && <p style={{ color: 'red' }}>{errors.password_confirmation[0]}</p>}
-                        <button type="submit" className="btn">Регистрация</button>
-                    </form>
-                    <div className={styles.authButtonSwap}>
-                        <button onClick={logIn} className="btn">Или вход</button>
+            <form onSubmit={handleSubmit} className={styles.authForm}>
+                <h2>Регистрация</h2>
+                <div className={styles.authItem}>
+                    <label>Имя</label>
+                    <input
+                        type="text"
+                        name="name"
+                        onChange={handleChange}
+                        placeholder="Имя"
+                        required
+                    />
+                    {errors.name && <p style={{color: 'red'}}>{errors.name[0]}</p>}
+                </div>
+                <div className={styles.authItem}>
+                    <label>Почта</label>
+                    <input
+                        type="email"
+                        name="email"
+                        onChange={handleChange}
+                        placeholder="Почта"
+                        required
+                    />
+                    {errors.email && <p style={{color: 'red'}}>{errors.email[0]}</p>}
+                </div>
+                <div className={styles.authItem}>
+                    <label>Пароль</label>
+                    <input
+                        type="password"
+                        name="password"
+                        onChange={handleChange}
+                        placeholder="Пароль"
+                        required
+                    />
+                    {errors.password && <p style={{color: 'red'}}>{errors.password[0]}</p>}
+                </div>
+                <div className={styles.authItem}>
+                    <label>Подтвердите пароль</label>
+                    <input
+                        type="password"
+                        name="password_confirmation"
+                        onChange={handleChange}
+                        placeholder="Подтвердите пароль"
+                        required
+                    />
+                    {errors.password_confirmation && <p style={{color: 'red'}}>{errors.password_confirmation[0]}</p>}
+                </div>
+                <button type="submit" className="btn">Регистрация</button>
+                <div className={styles.authButtonSwap}>
+                    <button onClick={logIn}>Или вход</button>
+                </div>
+                {errors.general && (
+                    <div style={{color: 'red', marginTop: '10px'}}>
+                        <p>{errors.general}</p>
                     </div>
-                    {errors.general && (
-                        <div style={{color: 'red', marginTop: '10px' }}>
-                            <p>{errors.general}</p>
-                        </div>
-                    )}
-                </div>
-                <div className={styles.authImage}>
-                    <Image src={Logo} alt="Logo" />
-                </div>
-            </div>
+                )}
+            </form>
         </div>
     )
 }

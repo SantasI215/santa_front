@@ -32,14 +32,15 @@ export default function Login() {
             });
     
           
-            Cookies.set('token', response.data.token, { expires: 7 }); 
+            Cookies.set('token', response.data.token, { expires: 7 }); //Зачем заморочился на куки? и с локальным хранилищем нормально было
             alert('Успешный вход!');
 
             
             if (response.data.user.role === 'admin') {
                 router.push('/admin/dashboard');  
-            } else {
-                router.push('/profile');  
+            }
+            if (response.data.user.role === 'user') {
+                router.push('/');
             }
         } catch (err) {
             if (err.response && err.response.status === 401) {
@@ -56,32 +57,34 @@ export default function Login() {
 
     return (
         <div className="register container">
-            <div className={styles.authContent}>
-                <div className={styles.authForm}>
-                    <form onSubmit={handleSubmit}>
-                        <h2>Вход</h2>
-                        <input
-                            type="email"
-                            name="email"
-                            onChange={handleChange}
-                            placeholder="Почта"
-                            required
-                        />
-                        <input
-                            type="password"
-                            name="password"
-                            onChange={handleChange}
-                            placeholder="Пароль"
-                            required
-                        />
-                        <button type="submit" className="btn">Вход</button>
-                    </form>
-                    <div className={styles.authButtonSwap}>
-                        <button onClick={logIn} className="btn">Или регистрация</button>
-                    </div>
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
+            <form onSubmit={handleSubmit} className={styles.authForm}>
+                <h2>Вход</h2>
+                <div className={styles.authItem}>
+                    <label>Почта</label>
+                    <input
+                        type="email"
+                        name="email"
+                        onChange={handleChange}
+                        placeholder="Введите свою почту"
+                        required
+                    />
                 </div>
-            </div>
+                <div className={styles.authItem}>
+                    <label>Пароль</label>
+                    <input
+                        type="password"
+                        name="password"
+                        onChange={handleChange}
+                        placeholder="Введите свой пароль"
+                        required
+                    />
+                </div>
+                <button type="submit" className="btn">Вход</button>
+                <div className={styles.authButtonSwap}>
+                    <button onClick={logIn}>Или регистрация</button>
+                </div>
+                {error && <p style={{color: 'red'}}>{error}</p>}
+            </form>
         </div>
     );
 }

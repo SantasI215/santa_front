@@ -1,40 +1,33 @@
-.authContent {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: var(--radius);
-    box-shadow: 8px 8px 30px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
 .authForm {
-    padding: calc(var(--distance) * 2) var(--distance);
+    width: 100%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing);
+    gap: calc(var(--spacing) / 2);
 }
 
-.authForm form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing);
-}
-
-.authContent h2, .authButtonSwap {
+.authForm h2, .authButtonSwap {
+    margin: 0;
     text-align: center;
 }
+
+.authItem {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .authForm input {
     width: 100%;
-    max-width: 400px; 
-    padding: 15px; 
+    padding: 10px;
     font-size: 16px; 
     border: 2px solid #ddd;
-    border-radius: 8px; 
-    margin-bottom: 15px;
     box-sizing: border-box; 
     background-color: #f9f9f9; 
-    transition: border-color 0.3s ease; 
+    transition: var(--transition);
+    font-family: "Mulish", sans-serif;
+    font-weight: 400;
+    border-radius: var(--radius);
 }
 
 .authForm input:focus {
@@ -42,6 +35,17 @@
     outline: none;
     background-color: #fff; 
 }
+
+.authButtonSwap button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--accent);
+    font-size: 20px;
+    font-family: "Mulish", sans-serif;
+    font-weight: 400;
+}
+
 @media (max-width: 600px) {
     .authContent {
         grid-template-columns: 1fr;

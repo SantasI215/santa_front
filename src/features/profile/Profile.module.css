@@ -1,0 +1,11 @@
+.profileContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--distance);
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}
