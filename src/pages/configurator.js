@@ -1,5 +1,6 @@
 import MainLayout from "@/layouts/main.layout"
 import Head from 'next/head';
+import Configurator from "@/features/configurator/Configurator";
 
 export default function Contact() {
 
@@ -10,7 +11,7 @@ export default function Contact() {
                 <meta name="description" content="" />
             </Head>
             <MainLayout>
-                <h1>Тут будет Конфигуратор</h1>
+                <Configurator />
             </MainLayout>
         </>
     )
