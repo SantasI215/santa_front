@@ -1,0 +1,18 @@
+.configuratorForm {
+    margin-top: var(--distance);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}
+
+.configuratorItem {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
+}
+
+.configuratorCheckbox {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
