@@ -38,7 +38,8 @@
     border-collapse: collapse;
 }
 
-.usersTable th, .usersTable td {
+.usersTable th,
+.usersTable td {
     padding: 5px;
     text-align: left;
     border: 1px solid #BF8845;
@@ -57,4 +58,30 @@
     background-color: #E0E0E0;
 }
 
+.configurator {
+    margin-top: 20px;
+}
 
+.configForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.configForm div {
+    display: flex;
+    flex-direction: column;
+}
+
+.configForm label {
+    font-weight: bold;
+}
+
+.configForm input,
+.configForm textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 400px;
+}
