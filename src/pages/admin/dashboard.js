@@ -13,11 +13,21 @@ const Dashboard = () => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [newBox, setNewBox] = useState({ name: '', description: '', price: '' });
+    const [newItem, setNewItem] = useState({ name: '', description: '', price: '' });
     const [boxes, setBoxes] = useState([]);
+
 
     const handleBoxInputChange = (e) => {
         const { name, value } = e.target;
         setNewBox((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleItemInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewItem((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
     const createBox = async () => {
@@ -33,10 +43,26 @@ const Dashboard = () => {
             );
 
             console.log('Box created:', response.data);
-            setItems((prevItems) => [...prevItems, response.data.box]);
-            setNewBox({ id: '', name: '', description: '', price: '' }); // Очистить форму
+            setBoxes((prevBoxes) => [...prevBoxes, response.data.box]);
+            setNewBox({ name: '', description: '', price: '' });
         } catch (error) {
             console.error('Error creating box:', error.response || error.message);
+        }
+    };
+
+    const createItem = async () => {
+        try {
+            const response = await axios.post(`${config.apiUrl}/items`, newItem, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                },
+            });
+    
+            console.log('Товар создан:', response.data);в
+            setItems((prevItems) => [...prevItems, response.data.item]);у
+            setNewItem({ name: '', description: '', price: '' });
+        } catch (error) {
+            console.error('Ошибка при добавлении товара:', error.response || error.message);
         }
     };
 
@@ -106,13 +132,12 @@ const Dashboard = () => {
                 });
                 setItems(itemsResponse.data);
 
-                // Новый запрос на получение всех боксов
                 const boxesResponse = await axios.get(`${config.apiUrl}/boxes`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setBoxes(boxesResponse.data); // Сохраняем боксы в состоянии
+                setBoxes(boxesResponse.data);
             } catch (error) {
                 console.error('Ошибка при получении данных:', error);
                 router.push('/auth/login');
@@ -123,7 +148,6 @@ const Dashboard = () => {
 
         fetchData();
     }, [router]);
-    ;
 
     if (loading) return <Preloader />;
 
@@ -196,7 +220,6 @@ const Dashboard = () => {
                                 <td>{item.description}</td>
                                 <td>{item.price}</td>
                                 <td>
-
                                     <button onClick={() => deleteItem(item.id)} className="btn">
                                         Удалить
                                     </button>
@@ -207,10 +230,51 @@ const Dashboard = () => {
                 </table>
             </div>
 
+            <h2>Добавить новый товар</h2>
+            <div className={styles.configurator}>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        createItem(); 
+                    }}
+                    className={styles.configForm}
+                >
+                    <div>
+                        <label>Название товара:</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={newItem.name || ''}
+                            onChange={handleItemInputChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label>Описание:</label>
+                        <textarea
+                            name="description"
+                            value={newItem.description || ''}
+                            onChange={handleItemInputChange}
+                        />
+                    </div>
+                    <div>
+                        <label>Цена:</label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={newItem.price || ''} 
+                            onChange={handleItemInputChange}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn">
+                        Создать
+                    </button>
+                </form>
+            </div>
 
             <h2>Добавить новый бокс</h2>
             <div className={styles.configurator}>
-
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -218,7 +282,6 @@ const Dashboard = () => {
                     }}
                     className={styles.configForm}
                 >
-
                     <div>
                         <label>Название:</label>
                         <input
