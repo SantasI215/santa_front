@@ -1,40 +1,40 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import config from '@/pages/api/config';
-import Preloader from '@/components/Preloader';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+import config from "@/pages/api/config";
+import Preloader from "@/components/Preloader";
 import Cookies from "js-cookie";
-import styles from './Profile.module.css';
+import styles from "./Profile.module.css";
+import Orders from "@/features/orders/Orders";
 
 export default function Profile() {
     const router = useRouter();
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const token = Cookies.get('token');
+            const token = Cookies.get("token");
 
             if (!token) {
-                router.push('/auth/login');
+                router.push("/auth/login");
                 return;
             }
 
             try {
+                // Запрос данных пользователя
                 const { data } = await axios.get(`${config.apiUrl}/user`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
                 setUserData(data);
 
-                if (data.role === 'admin') {
-                    router.push('/admin/dashboard');
+                if (data.role === "admin") {
+                    router.push("/admin/dashboard");
                 }
-            } catch (err) {
-                setError('Ошибка при авторизации. Пожалуйста, войдите заново.');
-                Cookies.remove('token');
-                router.push('/auth/login');
+            } catch {
+                Cookies.remove("token");
+                router.push("/auth/login");
             } finally {
                 setLoading(false);
             }
@@ -44,12 +44,11 @@ export default function Profile() {
     }, [router]);
 
     const handleLogout = () => {
-        Cookies.remove('token'); // Удаление токена
-        router.push('/auth/login'); // Перенаправление на страницу логина
+        Cookies.remove("token");
+        router.push("/auth/login");
     };
 
     if (loading) return <Preloader />;
-    if (error) return <div>{error}</div>;
     if (!userData) return null;
 
     return (
@@ -65,10 +64,11 @@ export default function Profile() {
                         </button>
                     </div>
                     <div className={styles.profileOrder}>
-                        <h2>Заказы</h2>
+                        <h2>Ваши заказы</h2>
+                        <Orders />
                     </div>
                 </div>
             </div>
         </div>
     );
-};
+}

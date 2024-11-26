@@ -5,63 +5,70 @@ import styles from "./Cart.module.css";
 import Preloader from "@/components/Preloader";
 import config from "@/pages/api/config";
 import Cookies from "js-cookie";
-import Box from "@/assets/img/Box.png";
-import Basket from "@/assets/img/Basket.svg";
+import BoxImage from "@/assets/img/Box.png";
+import BasketIcon from "@/assets/img/Basket.svg";
+import { useRouter } from "next/router";
 
 export default function Cart() {
-    const [cartBoxes, setCartBoxes] = useState([]);
+    const router = useRouter();
+    const [cartData, setCartData] = useState(null); // Данные корзины
     const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("");
 
+    // Загрузка данных корзины
     useEffect(() => {
-        const fetchCartBoxes = async () => {
+        const fetchCartData = async () => {
+            setLoading(true);
+            setErrorMessage(""); // Сброс ошибки перед загрузкой
+
             try {
-                const token = Cookies.get("token");
                 const { data } = await axios.get(`${config.apiUrl}/cart`, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${Cookies.get("token")}` },
                 });
-                setCartBoxes(data);
+                setCartData(data); // Сохраняем весь ответ от API
             } catch (error) {
                 console.error("Ошибка загрузки корзины:", error);
+                setErrorMessage("Не удалось загрузить корзину. Попробуйте позже.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchCartBoxes();
+        fetchCartData();
     }, []);
 
-    // Функция для удаления товара из корзины
+    // Удаление элемента из корзины
     const removeItemFromCart = async (cartItemId) => {
         try {
-            const token = Cookies.get("token");
-            await axios.delete(`${config.apiUrl}/cart/${cartItemId}`, {
-                headers: { Authorization: `Bearer ${token}` },
+            await axios.delete(`${config.apiUrl}/cart/remove/${cartItemId}`, {
+                headers: { Authorization: `Bearer ${Cookies.get("token")}` },
             });
-
-            // Обновляем корзину после удаления товара
-            setCartBoxes(cartBoxes.filter(item => item.id !== cartItemId));
+            // Перезагрузка корзины после удаления
+            const { data } = await axios.get(`${config.apiUrl}/cart`, {
+                headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+            });
+            setCartData(data);
         } catch (error) {
-            console.error("Ошибка при удалении товара из корзины:", error);
+            console.error("Ошибка при удалении товара:", error);
+            setErrorMessage("Не удалось удалить товар. Попробуйте снова.");
         }
     };
 
-    // Рассчитываем общую стоимость и количество товаров
-    const totalPrice = cartBoxes.reduce(
-        (sum, cartItem) => sum + cartItem.box.price * cartItem.quantity,
-        0
-    );
+    // Обработка перехода к оформлению заказа
+    const handleCheckout = () => {
+        if (!cartData?.cart_items?.length) {
+            alert("Корзина пуста. Добавьте товары перед оформлением.");
+            return;
+        }
+        router.push("/checkout");
+    };
 
-    const totalQuantity = cartBoxes.reduce(
-        (sum, cartItem) => sum + cartItem.quantity,
-        0
-    );
-
+    // Отображение загрузки, ошибки или пустой корзины
     if (loading) return <Preloader />;
-    if (!cartBoxes.length) return (
-        <div className="empty">
-            <p>Корзина пуста</p>
-        </div>
-    )
+    if (errorMessage) return <div className="error">{errorMessage}</div>;
+    if (!cartData?.cart_items?.length) return <div className="empty"><p>Корзина пуста</p></div>;
+
+    const { cart_items: cartItems, total_price: totalPrice, total_quantity: totalQuantity } = cartData;
 
     return (
         <div className="cart">
@@ -69,21 +76,16 @@ export default function Cart() {
                 <h2>Ваша корзина</h2>
                 <div className={styles.cartContent}>
                     <div className={styles.cartProducts}>
-                        {cartBoxes.map(({ box, id, quantity }) => (
+                        {cartItems.map(({ box, id, quantity }) => (
                             <div key={id} className={styles.cartItem}>
-                                <Image
-                                    src={Box}
-                                    alt={box.name}
-                                    width={100}
-                                    height={100}
-                                />
+                                <Image src={BoxImage} alt={box?.name || "Товар"} width={100} height={100} />
                                 <div className={styles.cartInfo}>
-                                    <h2>{box.name}</h2>
-                                    <h3>{box.price} ₽</h3>
+                                    <h2>{box?.name || "Название недоступно"}</h2>
+                                    <h3>{box?.price ? `${box.price} ₽` : "Цена недоступна"}</h3>
                                     <p>Количество: {quantity}</p>
                                 </div>
                                 <button className={styles.cartButton} onClick={() => removeItemFromCart(id)}>
-                                    <Image src={Basket} alt=""/>
+                                    <Image src={BasketIcon} alt="Удалить товар" />
                                 </button>
                             </div>
                         ))}
@@ -91,23 +93,14 @@ export default function Cart() {
                     <form className={styles.cartOrder}>
                         <h2>Оформление заказа</h2>
                         <div className={styles.cartOrderInfo}>
-                            <p>Цена:</p>
+                            <p>Общая стоимость:</p>
                             <p>{totalPrice} ₽</p>
                         </div>
                         <div className={styles.cartOrderInfo}>
                             <p>Количество товаров:</p>
                             <p>{totalQuantity}</p>
                         </div>
-                        <button
-                            type="submit"
-                            className="btn"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                alert("Заказ оформлен!");
-                            }}
-                        >
-                            Оформить заказ
-                        </button>
+                        <button type="button" className="btn" onClick={handleCheckout}>Оформить заказ</button>
                     </form>
                 </div>
             </div>

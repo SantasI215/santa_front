@@ -61,17 +61,10 @@ export default function BoxDetail() {
                             <p>{box.price} ₽</p>
                         </div>
                         <div className={styles.boxDetailTextContent}>
-                            <p><strong>Что внутри:</strong></p>
+                            <p><strong>Категории:</strong></p>
                             <ul>
-                                {box.items.map(item => (
-                                    <li key={item.id}>
-                                        <p><strong>{item.name}</strong> - {item.pivot.quantity} шт.</p>
-                                        {item.categories && item.categories.length > 0 && (
-                                            <p>
-                                                Категории: {item.categories.map(category => category.name).join(', ')}
-                                            </p>
-                                        )}
-                                    </li>
+                                {box.categories.map(category => (
+                                    <li key={category.id}>{category.name}</li>
                                 ))}
                             </ul>
                         </div>
