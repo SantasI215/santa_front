@@ -13,9 +13,26 @@ const Dashboard = () => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [newBox, setNewBox] = useState({ name: '', description: '', price: '' });
-    const [newItem, setNewItem] = useState({ name: '', description: '', price: '' });
+    const [newItem, setNewItem] = useState({ name: '', description: '', price: '', categories: [] });
+    const [newCategory, setNewCategory] = useState({ name: '', description: '' });
     const [boxes, setBoxes] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    
 
+
+    const handleCategorySelection = (categoryId) => {
+        setSelectedCategories((prevSelected) =>
+            prevSelected.includes(categoryId)
+                ? prevSelected.filter((id) => id !== categoryId)
+                : [...prevSelected, categoryId]
+        );
+    };
+
+    const handleCategoryInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewCategory((prev) => ({ ...prev, [name]: value }));
+    };
 
     const handleBoxInputChange = (e) => {
         const { name, value } = e.target;
@@ -28,6 +45,27 @@ const Dashboard = () => {
             ...prev,
             [name]: value,
         }));
+    };
+
+    const createCategory = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post(
+                `${config.apiUrl}/categories`,
+                newCategory,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    },
+                }
+            );
+            console.log('Категория добавлена:', response.data);
+            setCategories((prevCategories) => [...prevCategories, response.data]);
+            setNewCategory({ name: '', description: '' });
+        } catch (error) {
+            console.error('Ошибка при добавлении категории:', error.response || error.message);
+        }
     };
 
     const createBox = async () => {
@@ -52,19 +90,25 @@ const Dashboard = () => {
 
     const createItem = async () => {
         try {
-            const response = await axios.post(`${config.apiUrl}/items`, newItem, {
-                headers: {
-                    Authorization: `Bearer ${Cookies.get('token')}`,
-                },
-            });
-    
-            console.log('Товар создан:', response.data);в
-            setItems((prevItems) => [...prevItems, response.data.item]);у
+            const response = await axios.post(
+                `${config.apiUrl}/items`,
+                { ...newItem, categories: selectedCategories },
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    },
+                }
+            );
+
+            console.log('Товар создан:', response.data);
+            setItems((prevItems) => [...prevItems, response.data.item]);
             setNewItem({ name: '', description: '', price: '' });
+            setSelectedCategories([]);
         } catch (error) {
             console.error('Ошибка при добавлении товара:', error.response || error.message);
         }
     };
+
 
     const handleLogout = () => {
         Cookies.remove('token');
@@ -111,6 +155,12 @@ const Dashboard = () => {
             }
 
             try {
+                const response = await axios.get(`${config.apiUrl}/categories`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setCategories(response.data);
                 const userResponse = await axios.get(`${config.apiUrl}/user`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -132,7 +182,7 @@ const Dashboard = () => {
                 });
                 setItems(itemsResponse.data);
 
-                const boxesResponse = await axios.get(`${config.apiUrl}/boxes`, {
+                const boxesResponse = await axios.get(`${config.apiUrl}/all-boxes`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -210,23 +260,42 @@ const Dashboard = () => {
                             <th>Название товара</th>
                             <th>Описание</th>
                             <th>Цена</th>
+                            <th>Категория</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {items.map((item) => (
-                            <tr key={item.id}>
-                                <td>{item.name}</td>
-                                <td>{item.description}</td>
-                                <td>{item.price}</td>
-                                <td>
-                                    <button onClick={() => deleteItem(item.id)} className="btn">
-                                        Удалить
-                                    </button>
-                                </td>
+                        {items && items.length > 0 ? (
+                            items.map((item) => (
+                                <tr key={item.id}>
+                                    <td>{item?.name || 'Нет названия'}</td>
+                                    <td>{item?.description || 'Нет описания'}</td>
+                                    <td>{item?.price || 'Нет цены'}</td>
+                                    <td>
+                                        {categories && categories.length > 0 ? (
+                                            categories.map((category) => (
+                                                <tr key={category.id}>
+                                                    <td>{category.name}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <span>Нет категории</span>
+                                        )}
+                                    </td>
+                                    <td>
+                                        <button onClick={() => deleteItem(item.id)} className="btn">
+                                            Удалить
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="5">Товары отсутствуют</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
+
                 </table>
             </div>
 
@@ -235,7 +304,7 @@ const Dashboard = () => {
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        createItem(); 
+                        createItem();
                     }}
                     className={styles.configForm}
                 >
@@ -262,10 +331,32 @@ const Dashboard = () => {
                         <input
                             type="number"
                             name="price"
-                            value={newItem.price || ''} 
+                            value={newItem.price || ''}
                             onChange={handleItemInputChange}
                             required
                         />
+                    </div>
+                    <div>
+                        <label>Категории:</label>
+                        {categories.map((category) => (
+                            <div key={category.id}>
+                                <input
+                                    type="checkbox"
+                                    id={`category-${category.id}`}
+                                    value={category.id}
+                                    onChange={(e) => {
+                                        const { value, checked } = e.target;
+                                        setNewItem((prev) => ({
+                                            ...prev,
+                                            categories: checked
+                                                ? [...(prev.categories || []), value]
+                                                : prev.categories.filter((id) => id !== value),
+                                        }));
+                                    }}
+                                />
+                                <label htmlFor={`category-${category.id}`}>{category.name}</label>
+                            </div>
+                        ))}
                     </div>
                     <button type="submit" className="btn">
                         Создать
@@ -337,6 +428,47 @@ const Dashboard = () => {
                     </tbody>
                 </table>
             </div>
+
+            <div className={styles.dashboard}>
+                <h2>Список категорий</h2>
+                <div className={styles.categoriesList}>
+                    <table className={styles.usersTable}>
+                        <thead>
+                            <tr>
+                                <th>Название категории</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {categories.map((category) => (
+                                <tr key={category.id}>
+                                    <td>{category.name}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Добавить новую категорию</h2>
+                <div className={styles.configurator}>
+                    <form onSubmit={createCategory} className={styles.configForm}>
+                        <div>
+                            <label>Название категории:</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={newCategory.name || ''}
+                                onChange={handleCategoryInputChange}
+                                required
+                            />
+                        </div>
+                        <button type="submit" className="btn">
+                            Создать
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <h2>История заказов</h2>
         </div>
     );
 };
