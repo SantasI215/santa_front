@@ -17,6 +17,21 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [activeComponent, setActiveComponent] = useState('profile');
 
+    // Вынесенная функция handleLogout
+    const handleLogout = async () => {
+        try {
+            await axios.post(`${config.apiUrl}/logout`, {}, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('token')}`,
+                },
+            });
+            Cookies.remove('token');
+            router.push('/auth/login');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    };
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -57,6 +72,7 @@ const Dashboard = () => {
                                 <p><strong>Имя:</strong> {userData.name}</p>
                                 <p><strong>Email:</strong> {userData.email}</p>
                                 <p><strong>Вы:</strong> {userData.role}</p>
+                                <button className="btn" onClick={handleLogout}>Выйти</button>
                             </div>
                         )}
                     </>

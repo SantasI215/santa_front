@@ -3,10 +3,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import config from '@/pages/api/config';
 import styles from '../Admin.module.css';
-import Pagination from "@/components/pagination/Pagination";
-import Preloader from "@/components/Preloader";
+import Pagination from '@/components/pagination/Pagination';
+import Preloader from '@/components/Preloader';
 
-// Отдельные функции для API-запросов
+// API-запросы
 const fetchItems = async (page = 1) => {
     const response = await axios.get(`${config.apiUrl}/admin/items?page=${page}`, {
         headers: { Authorization: `Bearer ${Cookies.get('token')}` },
@@ -45,8 +45,9 @@ const ItemsManagement = () => {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [editItem, setEditItem] = useState(null);
 
-    // Загрузка товаров и категорий
+    // Загрузка данных
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -57,10 +58,7 @@ const ItemsManagement = () => {
                 const categoriesData = await fetchCategories();
                 setCategories(categoriesData || []);
             } catch (error) {
-                console.error('Error fetching data:', error);
-                setItems([]);
-                setTotalPages(1);
-                setCategories([]);
+                console.error('Ошибка при загрузке данных:', error);
             } finally {
                 setLoading(false);
             }
@@ -69,7 +67,27 @@ const ItemsManagement = () => {
         fetchData();
     }, [currentPage]);
 
-    // Обработчики ввода
+    // Обработчики событий
+    const handleEditItem = (item) => {
+        setEditItem(item);
+        setNewItem({ name: item.name, price: item.price, quantity: item.quantity });
+        setSelectedCategories(item.categories.map(cat => cat.id));
+    };
+
+    const handleUpdateItem = async () => {
+        try {
+            const updatedItem = await axios.put(
+                `${config.apiUrl}/admin/items/${editItem.id}`,
+                { ...newItem, categories: selectedCategories },
+                { headers: { Authorization: `Bearer ${Cookies.get('token')}` } }
+            );
+            setItems((prev) => prev.map((item) => (item.id === updatedItem.data.id ? updatedItem.data : item)));
+            resetForm();
+        } catch (error) {
+            console.error('Ошибка при обновлении товара:', error);
+        }
+    };
+
     const handleInputChange = ({ target: { name, value } }) => {
         setNewItem((prev) => ({ ...prev, [name]: value }));
     };
@@ -80,25 +98,22 @@ const ItemsManagement = () => {
         );
     };
 
-    // Создание нового товара
     const handleCreateItem = async () => {
         try {
             const createdItem = await createNewItem(newItem, selectedCategories);
-            setItems((prev) => [createdItem, ...prev]); // Добавляем новый элемент в начало списка
-            setNewItem({ name: '', price: '', quantity: '' });
-            setSelectedCategories([]);
+            setItems((prev) => [createdItem, ...prev]);
+            resetForm();
         } catch (error) {
-            console.error('Error creating item:', error);
+            console.error('Ошибка при создании товара:', error);
         }
     };
 
-    // Удаление товара
     const handleDeleteItem = async (itemId) => {
         try {
             await deleteItem(itemId);
-            setItems((prev) => prev.filter((item) => item.id !== itemId)); // Удаляем товар из списка
+            setItems((prev) => prev.filter((item) => item.id !== itemId));
         } catch (error) {
-            console.error('Error deleting item:', error);
+            console.error('Ошибка при удалении товара:', error);
         }
     };
 
@@ -109,17 +124,19 @@ const ItemsManagement = () => {
         }
     };
 
+    const resetForm = () => {
+        setEditItem(null);
+        setNewItem({ name: '', price: '', quantity: '' });
+        setSelectedCategories([]);
+    };
+
     if (loading) return <Preloader />;
 
     return (
         <div className={styles.content}>
             <div className={styles.container}>
-                <ItemsTable items={items} onDeleteItem={handleDeleteItem} />
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                />
+                <ItemsTable items={items} onEditItem={handleEditItem} onDeleteItem={handleDeleteItem} />
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             </div>
             <NewItemForm
                 newItem={newItem}
@@ -127,105 +144,94 @@ const ItemsManagement = () => {
                 selectedCategories={selectedCategories}
                 onInputChange={handleInputChange}
                 onCategorySelection={handleCategorySelection}
-                onCreateItem={handleCreateItem}
+                onCreateItem={editItem ? handleUpdateItem : handleCreateItem}
+                editMode={!!editItem}
             />
         </div>
     );
 };
 
-// Компонент таблицы товаров
-const ItemsTable = ({ items, onDeleteItem }) => (
+const ItemsTable = ({ items, onEditItem, onDeleteItem }) => (
     <div className={styles.container}>
         <h2>Список товаров</h2>
         <div className={styles.tableContainer}>
             <table className={styles.table}>
                 <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Цена</th>
-                    <th>Количество</th>
-                    <th>Категории</th>
-                    <th>Действие</th>
-                </tr>
+                    <tr>
+                        <th>Название</th>
+                        <th>Цена</th>
+                        <th>Количество</th>
+                        <th>Категории</th>
+                        <th>Действие</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {items.map((item) => (
-                    <tr key={item.id}>
-                        <td>{item.name}</td>
-                        <td>{item.price}₽</td>
-                        <td>{item.quantity}</td>
-                        <td>{item.categories?.map((cat) => cat.name).join(', ')}</td>
-                        <td>
-                            <button onClick={() => onDeleteItem(item.id)} className={styles.deleteButton}>Удалить</button>
-                        </td>
-                    </tr>
-                ))}
+                    {items.map((item) => (
+                        <tr key={item.id}>
+                            <td>{item.name}</td>
+                            <td>{item.price}₽</td>
+                            <td>{item.quantity}</td>
+                            <td>{item.categories?.map((cat) => cat.name).join(', ')}</td>
+                            <td>
+                                <button onClick={() => onEditItem(item)} className={styles.deleteButton}>Редактировать</button>
+                                <button onClick={() => onDeleteItem(item.id)} className={styles.deleteButton}>Удалить</button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>
     </div>
 );
 
-// Компонент формы добавления товара
-const NewItemForm = ({ newItem, categories, selectedCategories, onInputChange, onCategorySelection, onCreateItem }) => (
+const NewItemForm = ({ newItem, categories, selectedCategories, onInputChange, onCategorySelection, onCreateItem, editMode }) => (
     <div className={styles.container}>
-        <h2>Добавить новый товар</h2>
+        <h2>{editMode ? 'Редактировать товар' : 'Добавить новый товар'}</h2>
         <div className={styles.gridContainer}>
             <div className={styles.inputBlock}>
-                <div className={styles.itemContent}>
-                    <label>Название товара</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={newItem.name}
-                        onChange={onInputChange}
-                        placeholder="Название товара"
-                    />
-                </div>
-                <div className={styles.itemContent}>
-                    <label>Цена</label>
-                    <input
-                        type="number"
-                        name="price"
-                        value={newItem.price}
-                        min={0}
-                        onChange={onInputChange}
-                        placeholder="Цена"
-                    />
-                </div>
-                <div className={styles.itemContent}>
-                    <label>Количество</label>
-                    <input
-                        type="number"
-                        name="quantity"
-                        value={newItem.quantity}
-                        min={0}
-                        onChange={onInputChange}
-                        placeholder="Количество"
-                    />
-                </div>
+                <label>Название товара</label>
+                <input
+                    type="text"
+                    name="name"
+                    value={newItem.name}
+                    onChange={onInputChange}
+                    placeholder="Название товара"
+                />
+                <label>Цена</label>
+                <input
+                    type="number"
+                    name="price"
+                    value={newItem.price}
+                    min={0}
+                    onChange={onInputChange}
+                    placeholder="Цена"
+                />
+                <label>Количество</label>
+                <input
+                    type="number"
+                    name="quantity"
+                    value={newItem.quantity}
+                    min={0}
+                    onChange={onInputChange}
+                    placeholder="Количество"
+                />
             </div>
-            <div className={styles.itemContent}>
+            <div>
                 <p>Выберите категории:</p>
-                <div className={styles.newItemCategoryBlock}>
-
-                    <div className={styles.newItemCategoryContent}>
-                        {categories.map((category) => (
-                            <label key={category.id} className={styles.categoryLabel}>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedCategories.includes(category.id)}
-                                    onChange={() => onCategorySelection(category.id)}
-                                />
-                                {category.name}
-                            </label>
-                        ))}
-                    </div>
-                </div>
+                {categories.map((category) => (
+                    <label key={category.id} className={styles.categoryLabel}>
+                        <input
+                            type="checkbox"
+                            checked={selectedCategories.includes(category.id)}
+                            onChange={() => onCategorySelection(category.id)}
+                        />
+                        {category.name}
+                    </label>
+                ))}
             </div>
         </div>
         <button onClick={onCreateItem} className="btn">
-            Создать товар
+            {editMode ? 'Сохранить изменения' : 'Создать товар'}
         </button>
     </div>
 );

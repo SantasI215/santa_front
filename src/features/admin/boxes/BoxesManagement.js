@@ -10,6 +10,7 @@ const BoxesManagement = () => {
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [newBox, setNewBox] = useState({ name: '', description: '', price: '' });
+    const [editBox, setEditBox] = useState(null); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -39,7 +40,7 @@ const BoxesManagement = () => {
         fetchBoxesAndCategories();
     }, []);
 
-    // Обработка ввода для нового бокса
+    // Обработка ввода для нового бокса или редактирования
     const handleBoxInputChange = (e) => {
         const { name, value } = e.target;
         setNewBox((prev) => ({ ...prev, [name]: value }));
@@ -74,6 +75,42 @@ const BoxesManagement = () => {
         }
     };
 
+    // Редактирование бокса
+    const editBoxData = (box) => {
+        setEditBox(box);
+        setNewBox({
+            name: box.name,
+            description: box.description,
+            price: box.price,
+        });
+        setSelectedCategories(box.categories.map((category) => category.id)); // Выбор категорий
+    };
+
+    // Обновление бокса
+    const updateBox = async () => {
+        if (!editBox) return;
+        setError(null);
+        try {
+            const response = await axios.put(
+                `${config.apiUrl}/admin/boxes/${editBox.id}`,
+                { ...newBox, categories: selectedCategories },
+                {
+                    headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+                }
+            );
+            // setBoxes((prevBoxes) =>
+            //     prevBoxes.map((box) => (box.id === response.data.box.id ? response.data.box : box))
+            // ); // Обновляем бокс в списке
+            setEditBox(null); // Сброс редактируемого бокса
+            setNewBox({ name: '', description: '', price: '' });
+            setSelectedCategories([]);
+        } catch (error) {
+            console.error('Error updating box:', error);
+            setError('Не удалось обновить бокс.');
+        }
+    };
+
+    // Удаление бокса
     const deleteBox = async (boxId) => {
         try {
             await axios.delete(`${config.apiUrl}/admin/boxes/${boxId}`, {
@@ -119,6 +156,7 @@ const BoxesManagement = () => {
                                             </td>
                                             <td>
                                                 <button onClick={() => deleteBox(box.id)} className={styles.deleteButton}>Удалить</button>
+                                                <button onClick={() => editBoxData(box)} className={styles.deleteButton}>Редактировать</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -133,9 +171,9 @@ const BoxesManagement = () => {
                     {/* Ошибки */}
                     {error && <p className={styles.error}>{error}</p>}
 
-                    {/* Форма для добавления бокса */}
+                    {/* Форма для добавления или редактирования бокса */}
                     <div className={styles.container}>
-                        <h2>Добавить новый бокс</h2>
+                        <h2>{editBox ? 'Редактировать бокс' : 'Добавить новый бокс'}</h2>
                         <div className={styles.gridContainer}>
                             <div className={styles.inputBlock}>
                                 <div className={styles.itemContent}>
@@ -190,8 +228,8 @@ const BoxesManagement = () => {
                                 </div>
                             </div>
                         </div>
-                        <button onClick={createBox} className="btn">
-                            Создать бокс
+                        <button onClick={editBox ? updateBox : createBox} className="btn">
+                            {editBox ? 'Обновить бокс' : 'Создать бокс'}
                         </button>
                     </div>
                 </>
