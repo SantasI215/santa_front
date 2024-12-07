@@ -13,7 +13,7 @@ const BoxList = ({ apiEndpoint, title }) => {
     const [boxes, setBoxes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [inCart, setInCart] = useState({});
+    const [inCart, setInCart] = useState([]); // Список ID добавленных боксов
 
     // Загружаем боксы
     useEffect(() => {
@@ -38,15 +38,14 @@ const BoxList = ({ apiEndpoint, title }) => {
 
             // Отправка POST запроса на добавление товара в корзину
             const response = await axios.post(
-                `${config.apiUrl}/cart/add/${id}`,  // Убедитесь, что endpoint правильный
-                { box_id: id },  // Параметры запроса
-                { headers: { Authorization: `Bearer ${token}` } }  // Добавление авторизационного токена
+                `${config.apiUrl}/cart/add/${id}`,
+                { box_id: id }, // Параметры запроса
+                { headers: { Authorization: `Bearer ${token}` } } // Добавление авторизационного токена
             );
 
             // Обновление состояния корзины
-            if (response.status === 200) {
-                const updatedCart = { ...inCart, [id]: true };
-                setInCart(updatedCart);
+            if (response.status === 200 && response.data.cartItemId) {
+                setInCart([...inCart, response.data.cartItemId]);
             }
         } catch (err) {
             console.error('Ошибка при добавлении товара в корзину:', err);
@@ -65,16 +64,16 @@ const BoxList = ({ apiEndpoint, title }) => {
                     <li key={box.id} className={styles.boxItem}>
                         <Link href={`/boxes/${box.id}`}>
                             <div className={styles.boxInfo}>
-                                <Image src={BoxImage} alt={box.name}/>
+                                <Image src={BoxImage} alt={box.name} />
                                 <p>{box.name}</p>
                                 <h3>{box.price} ₽</h3>
                             </div>
                         </Link>
                         <button
                             className="btn"
-                            onClick={() => addToCart(box.id)}  // При клике добавляем в корзину
+                            onClick={() => addToCart(box.id)} // При клике добавляем в корзину
                         >
-                            {inCart[box.id] ? "В корзине" : "Купить"} {/* Меняем текст в зависимости от состояния */}
+                            Купить
                         </button>
                     </li>
                 ))}
@@ -86,7 +85,7 @@ const BoxList = ({ apiEndpoint, title }) => {
 export function OurBoxes() {
     return (
         <div className="box">
-            <BoxList apiEndpoint="all-boxes" title="Наши боксы"/>
+            <BoxList apiEndpoint="all-boxes" title="Наши боксы" />
         </div>
     );
 }

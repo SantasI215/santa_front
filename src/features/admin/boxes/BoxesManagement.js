@@ -4,6 +4,9 @@ import Cookies from 'js-cookie';
 import config from '@/pages/api/config';
 import styles from '../Admin.module.css';
 import Preloader from "@/components/Preloader";
+import Delete from '@/assets/img/Delete.svg';
+import Edit from '@/assets/img/Edit.svg';
+import Image from "next/image";
 
 const BoxesManagement = () => {
     const [boxes, setBoxes] = useState([]);
@@ -154,9 +157,19 @@ const BoxesManagement = () => {
                                             <td>
                                                 {box.categories?.map((category) => category.name).join(', ') || 'Нет категорий'}
                                             </td>
-                                            <td>
-                                                <button onClick={() => deleteBox(box.id)} className={styles.deleteButton}>Удалить</button>
-                                                <button onClick={() => editBoxData(box)} className={styles.deleteButton}>Редактировать</button>
+                                            <td className={styles.buttonSection}>
+                                                <button
+                                                    onClick={() => editBoxData(box)}
+                                                    className={`${styles.button} ${styles.editButton}`}
+                                                >
+                                                    <Image src={Edit} alt="" />
+                                                </button>
+                                                <button
+                                                    onClick={() => deleteBox(box.id)}
+                                                    className={`${styles.button} ${styles.deleteButton}`}
+                                                >
+                                                    <Image src={Delete} alt="" />
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}

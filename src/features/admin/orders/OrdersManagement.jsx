@@ -61,15 +61,16 @@ const OrdersManagement = () => {
                                 <p><span>Сумма заказа:</span> {order.total_price}₽</p>
                                 <p><span>Способ оплаты:</span> {order.payment_method}</p>
                             </div>
-                            <div>
+                            <div className={styles.orderBoxesContent}>
                                 <p>Детали заказа:</p>
                                 <div className={styles.orderItems}>
                                     {order.order_items && order.order_items.length > 0 ? (
                                         order.order_items.map((item) => (
-                                            <div key={item.id} className={styles.orderCard}>
-                                                <p><strong>Бокс: </strong> {item.box_id}</p>
-                                                <p><strong>Количество: </strong> {item.quantity}</p>
-                                                <p><strong>Цена: </strong> {item.price}₽</p>
+                                            <div key={item.id} className={styles.orderItem}>
+                                                <p><span>Статус: </span>{item.status}</p>
+                                                <p><span>Название: </span> {item.box.name}</p>
+                                                <p><span>Цена: </span> {item.price}₽</p>
+                                                <button className="btn">Перейти к сборке</button>
                                             </div>
                                         ))
                                     ) : (

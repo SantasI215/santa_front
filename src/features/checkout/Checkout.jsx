@@ -64,7 +64,7 @@ export default function Checkout() {
             <ul>
                 {cartItems.map(item => (
                     <li key={item.id}>
-                        {item.box.name} - {item.quantity} шт.
+                        {item.box.name}
                     </li>
                 ))}
             </ul>

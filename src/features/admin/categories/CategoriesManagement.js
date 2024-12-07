@@ -3,6 +3,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import config from '@/pages/api/config';
 import styles from '../Admin.module.css';
+import Image from "next/image";
+import Edit from "@/assets/img/Edit.svg";
+import Delete from "@/assets/img/Delete.svg";
 
 const CategoriesManagement = () => {
     const [categories, setCategories] = useState([]);
@@ -134,9 +137,19 @@ const CategoriesManagement = () => {
                                     <tr key={category.id}>
                                         <td>{category.id}</td>
                                         <td>{category.name}</td>
-                                        <td>
-                                            <button className={styles.deleteButton} onClick={() => startEditCategory(category)}>Редактировать</button>
-                                            <button className={styles.deleteButton} onClick={() => deleteCategory(category.id)}>Удалить</button>
+                                        <td className={styles.buttonSection}>
+                                            <button
+                                                onClick={() => startEditCategory(category)}
+                                                className={`${styles.button} ${styles.editButton}`}
+                                            >
+                                                <Image src={Edit} alt=""/>
+                                            </button>
+                                            <button
+                                                onClick={() => deleteCategory(category.id)}
+                                                className={`${styles.button} ${styles.deleteButton}`}
+                                            >
+                                                <Image src={Delete} alt=""/>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}

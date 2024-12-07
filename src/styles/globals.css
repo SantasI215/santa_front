@@ -3,7 +3,7 @@
 
 :root {
   --white: #ffffff;
-  --background: #FBEFE3;
+  --background: #fff8f3;
   --black: #000000;
   --main: #BF8845;
   --main-hover: #dda86c;
@@ -118,7 +118,7 @@ h4 {
   font-size: 32px;
   font-family: "Mulish", sans-serif;
   font-weight: 400;
-  color: var(--background);
+  color: var(--main);
 }
 
 .register {

@@ -5,6 +5,9 @@ import config from '@/pages/api/config';
 import styles from '../Admin.module.css';
 import Pagination from '@/components/pagination/Pagination';
 import Preloader from '@/components/Preloader';
+import Image from "next/image";
+import Edit from "@/assets/img/Edit.svg";
+import Delete from "@/assets/img/Delete.svg";
 
 // API-запросы
 const fetchItems = async (page = 1) => {
@@ -112,6 +115,7 @@ const ItemsManagement = () => {
         try {
             await deleteItem(itemId);
             setItems((prev) => prev.filter((item) => item.id !== itemId));
+            alert("Успех");
         } catch (error) {
             console.error('Ошибка при удалении товара:', error);
         }
@@ -172,9 +176,19 @@ const ItemsTable = ({ items, onEditItem, onDeleteItem }) => (
                             <td>{item.price}₽</td>
                             <td>{item.quantity}</td>
                             <td>{item.categories?.map((cat) => cat.name).join(', ')}</td>
-                            <td>
-                                <button onClick={() => onEditItem(item)} className={styles.deleteButton}>Редактировать</button>
-                                <button onClick={() => onDeleteItem(item.id)} className={styles.deleteButton}>Удалить</button>
+                            <td className={styles.buttonSection}>
+                                <button
+                                    onClick={() => onEditItem(item)}
+                                    className={`${styles.button} ${styles.editButton}`}
+                                >
+                                    <Image src={Edit} alt=""/>
+                                </button>
+                                <button
+                                    onClick={() => onDeleteItem(item.id)}
+                                    className={`${styles.button} ${styles.deleteButton}`}
+                                >
+                                    <Image src={Delete} alt=""/>
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -184,7 +198,15 @@ const ItemsTable = ({ items, onEditItem, onDeleteItem }) => (
     </div>
 );
 
-const NewItemForm = ({ newItem, categories, selectedCategories, onInputChange, onCategorySelection, onCreateItem, editMode }) => (
+const NewItemForm = ({
+                         newItem,
+                         categories,
+                         selectedCategories,
+                         onInputChange,
+                         onCategorySelection,
+                         onCreateItem,
+                         editMode
+                     }) => (
     <div className={styles.container}>
         <h2>{editMode ? 'Редактировать товар' : 'Добавить новый товар'}</h2>
         <div className={styles.gridContainer}>

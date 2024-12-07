@@ -42,7 +42,6 @@ export default function Orders() {
                         {order.items.map(item => (
                             <li key={item.id}>
                                 <p>{item.box.name}</p>
-                                <p>Количество: {item.quantity}</p>
                                 <p>Цена за штуку: {item.box.price} ₽</p>
                             </li>
                         ))}

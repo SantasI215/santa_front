@@ -80,6 +80,10 @@
 .table td {
     padding: 12px;
     text-align: left;
+
+}
+
+.table tr {
     border-bottom: 1px solid #ddd;
 }
 
@@ -144,16 +148,44 @@
     color: var(--white);
 }
 
-.deleteButton {
-    background-color: #ff4d4d;
+.buttonSection {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.button {
+    padding: 10px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     color: white;
     border: none;
-    padding: 5px 10px;
     cursor: pointer;
     border-radius: var(--radius);
+    transition: var(--transition);
+}
+.button img {
+    width: 15px;
+    height: 15px;
+}
+
+.deleteButton {
+    background-color: #ff4d4d;
 }
 .deleteButton:hover {
     background-color: #ff0000;
+}
+
+.editButton {
+    background-color: #4d9aff;
+}
+.editButton:hover {
+    background-color: #0048ff;
 }
 
 .orderCard {
@@ -182,8 +214,36 @@
     padding-bottom: 10px;
     border-bottom: 1px solid #dddddd;
 }
-.orderUser span, .orderInfo span {
+.orderUser span, .orderInfo span, .orderItem span {
     font-size: 20px;
     color: #575757;
     font-weight: bold;
+}
+
+.orderBoxesContent {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
+}
+
+.orderItems {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(var(--spacing) / 2);
+}
+
+.orderItem {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
+    border-radius: var(--radius);
+    border: 1px solid var(--main);
+    outline: 1px solid var(--white);
+    transition: var(--transition);
+}
+.orderItem:hover {
+    cursor: pointer;
+    border: 1px solid var(--accent);
+    outline: 1px solid var(--accent);
 }
