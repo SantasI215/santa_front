@@ -68,7 +68,7 @@ export default function Cart() {
     if (errorMessage) return <div className="error">{errorMessage}</div>;
     if (!cartData?.cart_items?.length) return <div className="empty"><p>Корзина пуста</p></div>;
 
-    const { cart_items: cartItems, total_price: totalPrice, total_quantity: totalQuantity } = cartData;
+    const { cart_items: cartItems, total_price: totalPrice, /*total_quantity: totalQuantity*/ } = cartData;
 
     return (
         <div className="cart">
@@ -76,13 +76,12 @@ export default function Cart() {
                 <h2>Ваша корзина</h2>
                 <div className={styles.cartContent}>
                     <div className={styles.cartProducts}>
-                        {cartItems.map(({ box, id, quantity }) => (
+                        {cartItems.map(({ box, id }) => (
                             <div key={id} className={styles.cartItem}>
                                 <Image src={BoxImage} alt={box?.name || "Товар"} width={100} height={100} />
                                 <div className={styles.cartInfo}>
                                     <h2>{box?.name || "Название недоступно"}</h2>
                                     <h3>{box?.price ? `${box.price} ₽` : "Цена недоступна"}</h3>
-                                    <p>Количество: {quantity}</p>
                                 </div>
                                 <button className={styles.cartButton} onClick={() => removeItemFromCart(id)}>
                                     <Image src={BasketIcon} alt="Удалить товар" />
@@ -95,10 +94,6 @@ export default function Cart() {
                         <div className={styles.cartOrderInfo}>
                             <p>Общая стоимость:</p>
                             <p>{totalPrice} ₽</p>
-                        </div>
-                        <div className={styles.cartOrderInfo}>
-                            <p>Количество товаров:</p>
-                            <p>{totalQuantity}</p>
                         </div>
                         <button type="button" className="btn" onClick={handleCheckout}>Оформить заказ</button>
                     </form>

@@ -36,13 +36,12 @@ export default function Orders() {
                     <p>Статус: {order.status}</p>
                     <p>Сумма: {order.total_price} ₽</p>
                     <p>Адрес: {order.address}</p>
-                    <p>Метод оплаты: {order.payment_method === 'card' ? 'Карта' : 'Наличные'}</p>
+                    <p>Метод оплаты: {order.payment_method}</p>
                     <h4>Товары:</h4>
                     <ul>
                         {order.items.map(item => (
                             <li key={item.id}>
                                 <p>{item.box.name}</p>
-                                <p>Количество: {item.quantity}</p>
                                 <p>Цена за штуку: {item.box.price} ₽</p>
                             </li>
                         ))}

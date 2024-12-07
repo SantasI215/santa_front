@@ -64,7 +64,7 @@ export default function Checkout() {
             <ul>
                 {cartItems.map(item => (
                     <li key={item.id}>
-                        {item.box.name} - {item.quantity} шт.
+                        {item.box.name}
                     </li>
                 ))}
             </ul>
@@ -85,8 +85,8 @@ export default function Checkout() {
                         value={form.payment_method}
                         onChange={(e) => setForm({ ...form, payment_method: e.target.value })}
                     >
-                        <option value="card">Карта</option>
-                        <option value="cash">Наличные</option>
+                        <option value="Карта">Карта</option>
+                        <option value="Наличные">Наличные</option>
                     </select>
                 </label>
                 <button type="submit">Оформить заказ</button>

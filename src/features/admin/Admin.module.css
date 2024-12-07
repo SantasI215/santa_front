@@ -1,0 +1,266 @@
+.dashboardContainer {
+    background-color: #f8f9fa;
+    display: grid;
+    grid-template-columns: 250px auto;
+}
+
+.boxAssemblyContainer {
+    background-color: #f8f9fa;
+    display: grid;
+    grid-template-columns: auto;
+}
+
+.sidebar {
+    background: #2c3e50;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100vh;
+}
+
+.navButton {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.2s;
+    font-size: 16px;
+}
+
+.navButton:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.navButton.active {
+    background: #3498db;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--distance);
+}
+
+.infoContainer {
+    height: 100vh;
+    overflow-y: scroll;
+    position: relative;
+    padding: var(--distance);
+}
+
+.infoContainer h2 {
+    color: #2c3e50;
+    margin: 0;
+}
+
+.userInfo {
+    margin-top: var(--spacing);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
+}
+
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: left;
+
+}
+
+.table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table thead th {
+    font-weight: bold;
+}
+
+.table th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+.gridContainer {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing);
+}
+
+.inputBlock {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}
+
+.newItemCategoryBlock {
+    height: 100%;
+    padding: 20px;
+    border: 1px solid var(--main);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.itemContent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.newItemCategoryContent {
+    height: 250px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.categoryLabel {
+    padding: 5px 10px;
+    border-radius: var(--radius);
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+}
+.categoryLabel:hover {
+    background: var(--main-hover);
+    color: var(--white);
+}
+
+.buttonSection {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.button {
+    padding: 10px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+.button img {
+    width: 15px;
+    height: 15px;
+}
+
+.deleteButton {
+    background-color: #ff4d4d;
+}
+.deleteButton:hover {
+    background-color: #ff0000;
+}
+
+.editButton {
+    background-color: #4d9aff;
+}
+.editButton:hover {
+    background-color: #0048ff;
+}
+
+.orderCard {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    border-radius: var(--radius);
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.orderHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.orderHeader p {
+    font-size: 16px;
+    color: #575757;
+}
+
+.orderUser, .orderInfo {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dddddd;
+}
+.orderUser span, .orderInfo span, .orderItem span {
+    font-size: 20px;
+    color: #575757;
+    font-weight: bold;
+}
+
+.orderBoxesContent {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
+}
+
+.orderItems {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(var(--spacing) / 2);
+}
+
+.orderItem {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
+    border-radius: var(--radius);
+    border: 1px solid var(--main);
+    outline: 1px solid var(--white);
+    transition: var(--transition);
+}
+.orderItem:hover {
+    cursor: pointer;
+    border: 1px solid var(--accent);
+    outline: 1px solid var(--accent);
+}
+
+.boxAssemblyInfo {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.boxAssemblyItems {
+    display: flex;
+}

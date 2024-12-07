@@ -3,7 +3,7 @@
 
 :root {
   --white: #ffffff;
-  --background: #FBEFE3;
+  --background: #fff8f3;
   --black: #000000;
   --main: #BF8845;
   --main-hover: #dda86c;
@@ -118,7 +118,7 @@ h4 {
   font-size: 32px;
   font-family: "Mulish", sans-serif;
   font-weight: 400;
-  color: var(--background);
+  color: var(--main);
 }
 
 .register {
@@ -235,7 +235,30 @@ header {
   color: var(--main-hover);
 }
 
+input, textarea {
+  padding: 10px;
+  background: none;
+  outline: none;
+  border-radius: var(--radius);
+  border: 1px solid var(--main);
+  font-size: 18px;
+  font-family: "Mulish", sans-serif;
+  font-weight: 400;
+  color: var(--main);
+}
+textarea {
+  resize: none;
+}
+
 /* Стили для блока с загрузкой */
+.preloader {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.2);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 .loading {
   display: flex;
   justify-content: center;
