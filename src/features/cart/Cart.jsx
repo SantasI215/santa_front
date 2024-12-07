@@ -68,7 +68,7 @@ export default function Cart() {
     if (errorMessage) return <div className="error">{errorMessage}</div>;
     if (!cartData?.cart_items?.length) return <div className="empty"><p>Корзина пуста</p></div>;
 
-    const { cart_items: cartItems, total_price: totalPrice, total_quantity: totalQuantity } = cartData;
+    const { cart_items: cartItems, total_price: totalPrice, /*total_quantity: totalQuantity*/ } = cartData;
 
     return (
         <div className="cart">
