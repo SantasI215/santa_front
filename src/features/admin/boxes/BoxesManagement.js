@@ -13,7 +13,7 @@ const BoxesManagement = () => {
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [newBox, setNewBox] = useState({ name: '', description: '', price: '' });
-    const [editBox, setEditBox] = useState(null); 
+    const [editBox, setEditBox] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 

@@ -4,6 +4,12 @@
     grid-template-columns: 250px auto;
 }
 
+.boxAssemblyContainer {
+    background-color: #f8f9fa;
+    display: grid;
+    grid-template-columns: auto;
+}
+
 .sidebar {
     background: #2c3e50;
     padding: 20px;
@@ -246,4 +252,15 @@
     cursor: pointer;
     border: 1px solid var(--accent);
     outline: 1px solid var(--accent);
+}
+
+.boxAssemblyInfo {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.boxAssemblyItems {
+    display: flex;
 }

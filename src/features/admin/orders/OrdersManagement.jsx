@@ -3,8 +3,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import config from '@/pages/api/config';
 import styles from './../Admin.module.css';
+import { useRouter } from 'next/router';
 
 const OrdersManagement = () => {
+    const router = useRouter();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -25,6 +27,10 @@ const OrdersManagement = () => {
             console.error('Error fetching orders:', error);
             setLoading(false);
         }
+    };
+
+    const handleGoToAssembly = (boxId) => {
+        router.push(`/admin/box-assembly/${boxId}`);
     };
 
     const formatDate = (dateString) => {
@@ -70,7 +76,14 @@ const OrdersManagement = () => {
                                                 <p><span>Статус: </span>{item.status}</p>
                                                 <p><span>Название: </span> {item.box.name}</p>
                                                 <p><span>Цена: </span> {item.price}₽</p>
-                                                <button className="btn">Перейти к сборке</button>
+                                                <div className={styles.boxButtons}>
+                                                    <button 
+                                                        className="btn"
+                                                        onClick={() => handleGoToAssembly(item.id)}
+                                                    >
+                                                        Перейти к сборке
+                                                    </button>
+                                                </div>
                                             </div>
                                         ))
                                     ) : (
