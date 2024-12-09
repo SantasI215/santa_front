@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import Preloader from "@/components/Preloader";
 import {useRouter} from "next/router";
 import config from "@/pages/api/config";
+import styles from "./Checkout.module.css";
 
 export default function Checkout() {
     const router = useRouter();
@@ -60,37 +61,44 @@ export default function Checkout() {
 
     return (
         <div className="checkout">
-            <h2>Оформление заказа</h2>
-            <ul>
-                {cartItems.map(item => (
-                    <li key={item.id}>
-                        {item.box.name}
-                    </li>
-                ))}
-            </ul>
-            <p>Итого: {totalPrice} ₽</p>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Адрес доставки:
-                    <input
-                        type="text"
-                        value={form.address}
-                        onChange={(e) => setForm({ ...form, address: e.target.value })}
-                        required
-                    />
-                </label>
-                <label>
-                    Метод оплаты:
-                    <select
-                        value={form.payment_method}
-                        onChange={(e) => setForm({ ...form, payment_method: e.target.value })}
-                    >
-                        <option value="Карта">Карта</option>
-                        <option value="Наличные">Наличные</option>
-                    </select>
-                </label>
-                <button type="submit">Оформить заказ</button>
-            </form>
+            <div className="container">
+                <div className={styles.checkoutContent}>
+                    <h2>Оформление заказа</h2>
+                    <ul>
+                        {cartItems.map(item => (
+                            <li key={item.id}>
+                                Название подарка: {item.box.name}
+                            </li>
+                        ))}
+                    </ul>
+                    <p>Стоимость заказа: {totalPrice} ₽</p>
+                    <form onSubmit={handleSubmit} className={styles.checkoutForm}>
+                        <div className={styles.checkoutFormContent}>
+                            <div className={styles.checkoutInput}>
+                                <label>Адрес доставки:</label>
+                                <input
+                                    type="text"
+                                    value={form.address}
+                                    placeholder="Введите свой адрес"
+                                    onChange={(e) => setForm({...form, address: e.target.value})}
+                                    required
+                                />
+                            </div>
+                            <div className={styles.checkoutInput}>
+                                <label>Метод оплаты:</label>
+                                <select
+                                    value={form.payment_method}
+                                    onChange={(e) => setForm({...form, payment_method: e.target.value})}
+                                >
+                                    <option value="Карта">Карта</option>
+                                    <option value="Наличные">Наличные</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" className="btn">Оформить заказ</button>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 }

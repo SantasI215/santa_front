@@ -12,8 +12,9 @@
     gap: 20px;
     border-radius: var(--radius);
     border: 3px solid var(--accent);
-    padding: 20px;
+    padding: 10px;
     align-items: center;
+    justify-content: space-between;
     transition: var(--transition);
 }
 
@@ -30,4 +31,10 @@
     font-weight: 400;
     text-align: center;
     color: var(--main);
+}
+
+.boxPrice {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }

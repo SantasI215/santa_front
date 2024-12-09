@@ -43,12 +43,12 @@
 }
 
 ::selection {
-  background: var(--background);
+  background: var(--accent);
   /* Safari */
 }
 
 ::-moz-selection {
-  background: var(--background);
+  background: var(--accent);
   /* Firefox */
 }
 
@@ -118,7 +118,7 @@ h4 {
   font-size: 32px;
   font-family: "Mulish", sans-serif;
   font-weight: 400;
-  color: var(--main);
+  color: var(--white);
 }
 
 .register {
@@ -196,6 +196,27 @@ header {
   padding-top: var(--header);
 }
 
+.orders {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing);
+}
+.order {
+  background: var(--white);
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--main);
+}
+
+.checkout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .btn {
   cursor: pointer;
   background: var(--main);
@@ -232,10 +253,10 @@ header {
 }
 
 .btn-text:hover {
-  color: var(--main-hover);
+  color: #b6b6b6;
 }
 
-input, textarea {
+input, textarea, select {
   padding: 10px;
   background: none;
   outline: none;
@@ -250,10 +271,18 @@ textarea {
   resize: none;
 }
 
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Стили для блока с загрузкой */
 .preloader {
+  z-index: 10;
   position: absolute;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
   top: 0;
   bottom: 0;
   left: 0;

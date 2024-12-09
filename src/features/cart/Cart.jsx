@@ -92,8 +92,7 @@ export default function Cart() {
                     <form className={styles.cartOrder}>
                         <h2>Оформление заказа</h2>
                         <div className={styles.cartOrderInfo}>
-                            <p>Общая стоимость:</p>
-                            <p>{totalPrice} ₽</p>
+                            <p>Общая стоимость: {totalPrice} ₽</p>
                         </div>
                         <button type="button" className="btn" onClick={handleCheckout}>Оформить заказ</button>
                     </form>
