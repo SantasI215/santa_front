@@ -1,7 +1,13 @@
-.configuratorForm {
-    margin-top: var(--distance);
+.form {
     display: flex;
     flex-direction: column;
+    gap: 20px;
+}
+
+.configuratorForm {
+    margin-top: var(--distance);
+    display: grid;
+    grid-template-columns: 2fr 3fr;
     gap: var(--spacing);
 }
 
@@ -11,8 +17,23 @@
     gap: calc(var(--spacing) / 2);
 }
 
-.configuratorCheckbox {
+.configuratorCheckboxContent {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.configuratorCheckbox label {
+    padding: 10px;
     display: flex;
     flex-direction: row;
     gap: 5px;
+    border: 1px solid var(--main);
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+.configuratorCheckbox label:hover {
+    background-color: var(--main-hover);
+    color: var(--white);
 }

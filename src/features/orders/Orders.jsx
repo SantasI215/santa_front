@@ -26,8 +26,6 @@ export default function Orders() {
         fetchOrders();
     }, []);
 
-    if (loading) return <Preloader />;
-
     return (
         <div className="orders">
             {orders.map(order => (

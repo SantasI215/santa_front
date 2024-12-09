@@ -19,7 +19,7 @@
     gap: var(--spacing);
     border-radius: var(--radius);
     border: 1px solid var(--accent);
-    padding: var(--spacing);
+    padding: 20px;
 }
 
 .cartImage {
@@ -45,7 +45,7 @@
 .cartOrder {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing);
+    gap: calc(var(--spacing) / 2);
 }
 
 .cartOrderInfo {

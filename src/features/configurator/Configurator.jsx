@@ -61,39 +61,45 @@ export default function Configurator() {
 
     return (
         <div className="configurator">
+            {loading && <Preloader />}
             <div className="container">
                 <h2>Конфигуратор подарка</h2>
-                {loading && <Preloader />}
                 {error && <div className="error">{error}</div>}
-                <form onSubmit={handleAddToCart} className={styles.configuratorForm}>
-                    <div className={styles.configuratorItem}>
-                        <label>Укажите сумму, на которую должно соответствовать содержимое подарка</label>
-                        <input
-                            type="number"
-                            min={0}
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                        />
-                    </div>
-                    <div className={styles.configuratorItem}>
-                        <label>Выберите категории, которые должны быть в подарке</label>
-                        {categories.map((category) => (
-                            <div key={category.id} className={styles.configuratorCheckbox}>
-                                <input
-                                    type="checkbox"
-                                    value={category.id}
-                                    onChange={(e) => {
-                                        const value = parseInt(e.target.value);
-                                        setSelectedCategories((prev) =>
-                                            e.target.checked
-                                                ? [...prev, value]
-                                                : prev.filter((id) => id !== value)
-                                        );
-                                    }}
-                                />
-                                <label>{category.name}</label>
+                <form onSubmit={handleAddToCart} className={styles.form}>
+                    <div className={styles.configuratorForm}>
+                        <div className={styles.configuratorItem}>
+                            <label>Укажите сумму, на которую должно соответствовать содержимое подарка (минимум 1990 рублей)</label>
+                            <input
+                                type="number"
+                                min={1990}
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.configuratorItem}>
+                            <label>Выберите категории, которые должны быть в подарке</label>
+                            <div className={styles.configuratorCheckboxContent}>
+                                {categories.map((category) => (
+                                    <div key={category.id} className={styles.configuratorCheckbox}>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                value={category.id}
+                                                onChange={(e) => {
+                                                    const value = parseInt(e.target.value);
+                                                    setSelectedCategories((prev) =>
+                                                        e.target.checked
+                                                            ? [...prev, value]
+                                                            : prev.filter((id) => id !== value)
+                                                    );
+                                                }}
+                                            />
+                                            {category.name}
+                                        </label>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
+                        </div>
                     </div>
                     <button type="submit" className="btn">Добавить в корзину</button>
                 </form>

@@ -14,7 +14,6 @@ export default function Footer() {
                         <Image src={LogoFooter} alt="" />
                     </div>
                     <ul className={styles.contactsUl}>
-
                         <li>
                             <h4>Наши Контакты</h4>
                         </li>
@@ -33,7 +32,6 @@ export default function Footer() {
 
                     </ul>
                     <ul className={styles.infoUl}>
-
                         <li>
                             <h4>Навигация По Сайту</h4>
                         </li>

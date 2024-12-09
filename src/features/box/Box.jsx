@@ -42,6 +42,7 @@ const BoxList = ({ apiEndpoint, title }) => {
                 { box_id: id }, // Параметры запроса
                 { headers: { Authorization: `Bearer ${token}` } } // Добавление авторизационного токена
             );
+            alert("Успешно!");
 
             // Обновление состояния корзины
             if (response.status === 200 && response.data.cartItemId) {
@@ -64,17 +65,19 @@ const BoxList = ({ apiEndpoint, title }) => {
                     <li key={box.id} className={styles.boxItem}>
                         <Link href={`/boxes/${box.id}`}>
                             <div className={styles.boxInfo}>
-                                <Image src={BoxImage} alt={box.name} />
+                                <Image src={BoxImage} alt={box.name}/>
                                 <p>{box.name}</p>
-                                <h3>{box.price} ₽</h3>
                             </div>
                         </Link>
-                        <button
-                            className="btn"
-                            onClick={() => addToCart(box.id)} // При клике добавляем в корзину
-                        >
-                            Купить
-                        </button>
+                        <div className={styles.boxPrice}>
+                            <h3>{box.price} ₽</h3>
+                            <button
+                                className="btn"
+                                onClick={() => addToCart(box.id)}
+                            >
+                                Купить
+                            </button>
+                        </div>
                     </li>
                 ))}
             </ul>
@@ -85,7 +88,7 @@ const BoxList = ({ apiEndpoint, title }) => {
 export function OurBoxes() {
     return (
         <div className="box">
-            <BoxList apiEndpoint="all-boxes" title="Наши боксы" />
+            <BoxList apiEndpoint="all-boxes" title="Наши боксы"/>
         </div>
     );
 }
