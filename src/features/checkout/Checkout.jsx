@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Preloader from "@/components/Preloader";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import config from "@/pages/api/config";
+import styles from "./Checkout.module.css";
 
 export default function Checkout() {
     const router = useRouter();
@@ -59,38 +60,42 @@ export default function Checkout() {
     if (loading) return <Preloader />;
 
     return (
-        <div className="checkout">
-            <h2>Оформление заказа</h2>
-            <ul>
-                {cartItems.map(item => (
-                    <li key={item.id}>
-                        {item.box.name} - {item.quantity} шт.
-                    </li>
-                ))}
-            </ul>
-            <p>Итого: {totalPrice} ₽</p>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Адрес доставки:
-                    <input
-                        type="text"
-                        value={form.address}
-                        onChange={(e) => setForm({ ...form, address: e.target.value })}
-                        required
-                    />
-                </label>
-                <label>
-                    Метод оплаты:
-                    <select
-                        value={form.payment_method}
-                        onChange={(e) => setForm({ ...form, payment_method: e.target.value })}
-                    >
-                        <option value="card">Карта</option>
-                        <option value="cash">Наличные</option>
-                    </select>
-                </label>
-                <button type="submit">Оформить заказ</button>
-            </form>
+        <div className="container">
+            <div className={styles.checkout}>
+                <h2>Оформление заказа</h2>
+                <ul>
+                    {cartItems.map(item => (
+                        <li key={item.id}>
+                            {item.box.name} - {item.quantity} шт.
+                        </li>
+                    ))}
+                </ul>
+                <p>Итого: {totalPrice} ₽</p>
+                <form onSubmit={handleSubmit}>
+                    <label className={styles.adress}>
+                        Адрес доставки:
+                        <input
+                            type="text"
+                            value={form.address}
+                            onChange={(e) => setForm({ ...form, address: e.target.value })}
+                            className={styles.input}
+                            style={{ width: `${Math.max(20, form.address.length * 1.2)}ch` }}
+                            required
+                        />
+                    </label><br />
+                    <label>
+                        Метод оплаты:
+                        <select
+                            value={form.payment_method}
+                            onChange={(e) => setForm({ ...form, payment_method: e.target.value })}
+                        >
+                            <option value="card">Карта</option>
+                            <option value="cash">Наличные</option>
+                        </select>
+                    </label><br />
+                    <button type="submit">Оформить заказ</button>
+                </form>
+            </div>
         </div>
     );
 }

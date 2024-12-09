@@ -1,8 +1,27 @@
+.container {
+@media (max-width: 650px) 
+     {
+        margin: 0px 130px;
+    }
+}
+
 .boxContent {
     padding-top: var(--spacing);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--spacing);
+
+    @media (max-width: 1440px) {
+        grid-template-columns: repeat(2, minmax(2, 2fr));
+    }
+
+    @media (max-width: 920px) {
+        grid-template-columns: repeat(1, minmax(0, 4fr));
+    }
+
+    @media (max-width: 650px) {
+        grid-template-columns: repeat(1, minmax(0, 4fr));
+    }
 }
 
 .boxItem {
@@ -17,6 +36,23 @@
     transition: var(--transition);
 }
 
+.boxItem img {
+    @media (max-width: 650px) {
+        width: 170px;
+        height: 100%;
+    }
+
+}
+
+.boxContent button {
+    @media (max-width: 650px) {
+        width: 130px;
+        height: 100%;
+        padding: 5px 20px;
+    }
+}
+
+
 .boxInfo {
     display: flex;
     flex-direction: column;
@@ -30,4 +66,14 @@
     font-weight: 400;
     text-align: center;
     color: var(--main);
+
+    @media (max-width: 650px) {
+        font-size: 24px;
+    }
+}
+
+.boxInfo h3 {
+    @media (max-width: 650px) {
+        font-size: 28px;
+    }
 }

@@ -2,6 +2,12 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    @media (max-width:1200px) {
+        display: flex;
+        flex-direction: column;
+    }
+
 }
 
 .createBoxContent {
@@ -9,4 +15,9 @@
     font-family: "Lobster", sans-serif;
     font-weight: 400;
     color: var(--main);
+}
+
+.createBoxContent button {
+    width: 170px;
+    height: 60px;
 }

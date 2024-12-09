@@ -3,13 +3,16 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: var(--spacing);
     margin: 40px 0px 40px 0px;
-
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    
 }
+
+
 
 .contactsUl {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing);
+    gap: 15px;
 }
 
 .contactsUl li {
@@ -27,7 +30,7 @@
 .infoUl {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing);
+    gap: 15px;
 }
 
 .infoUl li {

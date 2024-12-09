@@ -60,7 +60,7 @@ export default function Configurator() {
     };
 
     return (
-        <div className="configurator">
+        <div className={styles.configurator}>
             <div className="container">
                 <h2>Конфигуратор подарка</h2>
                 {loading && <Preloader />}
