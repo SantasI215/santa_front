@@ -5,7 +5,7 @@ import config from '@/pages/api/config';
 import styles from './../Admin.module.css';
 import { useRouter } from 'next/router';
 
-const OrdersManagement = () => {
+const HistoryOrdersManagement = () => {
     const router = useRouter();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ const OrdersManagement = () => {
 
     const fetchOrders = async () => {
         try {
-            const response = await axios.get(`${config.apiUrl}/collector/orders`, {
+            const response = await axios.get(`${config.apiUrl}/admin/orders`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -29,9 +29,6 @@ const OrdersManagement = () => {
         }
     };
 
-    const handleGoToAssembly = (boxId) => {
-        router.push(`/admin/box-assembly/${boxId}`);
-    };
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleString('ru-RU', {
@@ -49,7 +46,7 @@ const OrdersManagement = () => {
 
     return (
         <div className={styles.content}>
-            <h2>Список заказов</h2>
+            <h2>История заказов</h2>
             <div className={styles.gridContainer}>
                 {orders.length > 0 ? (
                     orders.map((order) => (
@@ -67,7 +64,7 @@ const OrdersManagement = () => {
                                 <p><span>Сумма заказа:</span> {order.total_price}₽</p>
                                 <p><span>Способ оплаты:</span> {order.payment_method}</p>
                             </div>
-                            <div className={styles.orderBoxesContent}>
+                            {/*<div className={styles.orderBoxesContent}>
                                 <p>Детали заказа:</p>
                                 <div className={styles.orderItems}>
                                     {order.order_items && order.order_items.length > 0 ? (
@@ -77,7 +74,7 @@ const OrdersManagement = () => {
                                                 <p><span>Название: </span> {item.box.name}</p>
                                                 <p><span>Цена: </span> {item.price}₽</p>
                                                 <div className={styles.boxButtons}>
-                                                    <button 
+                                                    <button
                                                         className="btn"
                                                         onClick={() => handleGoToAssembly(item.id)}
                                                     >
@@ -90,7 +87,7 @@ const OrdersManagement = () => {
                                         <p>Нет товаров в заказе.</p>
                                     )}
                                 </div>
-                            </div>
+                            </div>*/}
                         </div>
                     ))
                 ) : (
@@ -101,4 +98,4 @@ const OrdersManagement = () => {
     );
 };
 
-export default OrdersManagement;
+export default HistoryOrdersManagement;

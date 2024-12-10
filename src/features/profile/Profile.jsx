@@ -29,7 +29,7 @@ export default function Profile() {
 
                 setUserData(data);
 
-                if (data.role === "admin") {
+                if (data.role === "admin" || data.role === "collector") {
                     router.push("/admin/dashboard");
                 }
             } catch {
