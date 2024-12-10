@@ -33,7 +33,7 @@ const BoxAssembly = () => {
     const initializeBox = async () => {
         try {
             // Получаем информацию о боксе
-            const boxResponse = await axios.get(`${config.apiUrl}/boxes/${id}/items`, {
+            const boxResponse = await axios.get(`${config.apiUrl}/collector/boxes/${id}/items`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -50,7 +50,7 @@ const BoxAssembly = () => {
                 ));
             } else {
                 // Если бокс не собран, получаем предложения
-                const suggestionsResponse = await axios.get(`${config.apiUrl}/boxes/${id}/suggestions`, {
+                const suggestionsResponse = await axios.get(`${config.apiUrl}/collector/boxes/${id}/suggestions`, {
                     headers: {
                         Authorization: `Bearer ${Cookies.get('token')}`,
                     },
@@ -88,7 +88,7 @@ const BoxAssembly = () => {
         }
 
         try {
-            await axios.post(`${config.apiUrl}/boxes/${id}/save`, {
+            await axios.post(`${config.apiUrl}/collector/boxes/${id}/save`, {
                 items: suggestedItems
             }, {
                 headers: {
