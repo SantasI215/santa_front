@@ -113,18 +113,18 @@ const BoxesManagement = () => {
         }
     };
 
-    // Удаление бокса
-    const deleteBox = async (boxId) => {
-        try {
-            await axios.delete(`${config.apiUrl}/admin/boxes/${boxId}`, {
-                headers: { Authorization: `Bearer ${Cookies.get('token')}` },
-            });
-            setBoxes((prevBoxes) => prevBoxes.filter((box) => box.id !== boxId));
-        } catch (error) {
-            console.error('Error deleting box:', error);
-            setError('Не удалось удалить бокс.');
-        }
-    };
+    // // Удаление бокса
+    // const deleteBox = async (boxId) => {
+    //     try {
+    //         await axios.delete(`${config.apiUrl}/admin/boxes/${boxId}`, {
+    //             headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+    //         });
+    //         setBoxes((prevBoxes) => prevBoxes.filter((box) => box.id !== boxId));
+    //     } catch (error) {
+    //         console.error('Error deleting box:', error);
+    //         setError('Не удалось удалить бокс.');
+    //     }
+    // };
 
     return (
         <div className={styles.content}>
@@ -164,12 +164,6 @@ const BoxesManagement = () => {
                                                 >
                                                     <Image src={Edit} alt="" />
                                                 </button>
-                                                <button
-                                                    onClick={() => deleteBox(box.id)}
-                                                    className={`${styles.button} ${styles.deleteButton}`}
-                                                >
-                                                    <Image src={Delete} alt="" />
-                                                </button>
                                             </td>
                                         </tr>
                                     ))}
@@ -199,7 +193,7 @@ const BoxesManagement = () => {
                                         placeholder="Название бокса"
                                     />
                                 </div>
-                                <div className={styles.itemContent}>
+                                {/* <div className={styles.itemContent}>
                                     <label>Описание бокса</label>
                                     <textarea
                                         name="description"
@@ -207,8 +201,8 @@ const BoxesManagement = () => {
                                         onChange={handleBoxInputChange}
                                         placeholder="Описание бокса"
                                     />
-                                </div>
-                                <div className={styles.itemContent}>
+                                </div> */}
+                                {/* <div className={styles.itemContent}>
                                     <label>Цена</label>
                                     <input
                                         type="number"
@@ -217,9 +211,9 @@ const BoxesManagement = () => {
                                         onChange={handleBoxInputChange}
                                         placeholder="Цена"
                                     />
-                                </div>
+                                </div> */}
                             </div>
-                            <div className={styles.itemContent}>
+                            {/* <div className={styles.itemContent}>
                                 <p>Выберите категории:</p>
                                 <div className={styles.newItemCategoryBlock}>
                                     <div className={styles.newItemCategoryContent}>
@@ -239,7 +233,7 @@ const BoxesManagement = () => {
                                         )}
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <button onClick={editBox ? updateBox : createBox} className="btn">
                             {editBox ? 'Обновить бокс' : 'Создать бокс'}
