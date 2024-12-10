@@ -140,33 +140,33 @@ const BoxesManagement = () => {
                             <div className={styles.tableContainer}>
                                 <table className={styles.table}>
                                     <thead>
-                                    <tr>
-                                        <th>Название</th>
-                                        <th>Описание</th>
-                                        <th>Цена</th>
-                                        <th>Категории</th>
-                                        <th>Действие</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Название</th>
+                                            <th>Описание</th>
+                                            <th>Цена</th>
+                                            <th>Категории</th>
+                                            <th>Действие</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    {boxes.map((box) => (
-                                        <tr key={box.id}>
-                                            <td>{box.name}</td>
-                                            <td>{box.description}</td>
-                                            <td>{box.price}₽</td>
-                                            <td>
-                                                {box.categories?.map((category) => category.name).join(', ') || 'Нет категорий'}
-                                            </td>
-                                            <td className={styles.buttonSection}>
-                                                <button
-                                                    onClick={() => editBoxData(box)}
-                                                    className={`${styles.button} ${styles.editButton}`}
-                                                >
-                                                    <Image src={Edit} alt="" />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                        {boxes.map((box) => (
+                                            <tr key={box.id}>
+                                                <td>{box.name}</td>
+                                                <td>{box.description}</td>
+                                                <td>{box.price}₽</td>
+                                                <td>
+                                                    {box.categories?.map((category) => category.name).join(', ') || 'Нет категорий'}
+                                                </td>
+                                                <td className={styles.buttonSection}>
+                                                    <button
+                                                        onClick={() => editBoxData(box)}
+                                                        className={`${styles.button} ${styles.editButton}`}
+                                                    >
+                                                        <Image src={Edit} alt="" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>
@@ -193,16 +193,17 @@ const BoxesManagement = () => {
                                         placeholder="Название бокса"
                                     />
                                 </div>
-                                {/* <div className={styles.itemContent}>
+                                <div className={styles.itemContent}>
                                     <label>Описание бокса</label>
                                     <textarea
                                         name="description"
                                         value={newBox.description}
                                         onChange={handleBoxInputChange}
                                         placeholder="Описание бокса"
+                                        disabled={!!editBox} // Заблокировать при редактировании
                                     />
-                                </div> */}
-                                {/* <div className={styles.itemContent}>
+                                </div>
+                                <div className={styles.itemContent}>
                                     <label>Цена</label>
                                     <input
                                         type="number"
@@ -210,10 +211,11 @@ const BoxesManagement = () => {
                                         value={newBox.price}
                                         onChange={handleBoxInputChange}
                                         placeholder="Цена"
+                                        disabled={!!editBox} // Заблокировать при редактировании
                                     />
-                                </div> */}
+                                </div>
                             </div>
-                            {/* <div className={styles.itemContent}>
+                            <div className={styles.itemContent}>
                                 <p>Выберите категории:</p>
                                 <div className={styles.newItemCategoryBlock}>
                                     <div className={styles.newItemCategoryContent}>
@@ -224,6 +226,7 @@ const BoxesManagement = () => {
                                                         type="checkbox"
                                                         checked={selectedCategories.includes(category.id)}
                                                         onChange={() => onCategorySelection(category.id)}
+                                                        disabled={!!editBox} // Заблокировать при редактировании
                                                     />
                                                     {category.name}
                                                 </label>
@@ -233,12 +236,13 @@ const BoxesManagement = () => {
                                         )}
                                     </div>
                                 </div>
-                            </div> */}
+                            </div>
                         </div>
                         <button onClick={editBox ? updateBox : createBox} className="btn">
                             {editBox ? 'Обновить бокс' : 'Создать бокс'}
                         </button>
                     </div>
+
                 </>
             )}
         </div>
