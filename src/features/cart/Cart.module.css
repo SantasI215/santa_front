@@ -5,6 +5,13 @@
     gap: var(--distance);
 }
 
+@media (max-width: 1024px) {
+    .cartContent {
+    display: grid;
+    grid-template-columns: auto;
+    }
+}
+
 .cartProducts {
     display: flex;
     flex-direction: column;
