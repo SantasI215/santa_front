@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import config from '@/pages/api/config';
@@ -49,6 +49,7 @@ const ItemsManagement = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [editItem, setEditItem] = useState(null);
+    const formRef = useRef(null);
 
     // Загрузка данных
     useEffect(() => {
@@ -75,6 +76,8 @@ const ItemsManagement = () => {
         setEditItem(item);
         setNewItem({ name: item.name, price: item.price, quantity: item.quantity });
         setSelectedCategories(item.categories.map(cat => cat.id));
+
+        formRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const handleUpdateItem = async () => {
@@ -142,15 +145,18 @@ const ItemsManagement = () => {
                 <ItemsTable items={items} onEditItem={handleEditItem} onDeleteItem={handleDeleteItem} />
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             </div>
-            <NewItemForm
-                newItem={newItem}
-                categories={categories}
-                selectedCategories={selectedCategories}
-                onInputChange={handleInputChange}
-                onCategorySelection={handleCategorySelection}
-                onCreateItem={editItem ? handleUpdateItem : handleCreateItem}
-                editMode={!!editItem}
-            />
+            {/* Привязываем реф к блоку формы */}
+            <div ref={formRef}>
+                <NewItemForm
+                    newItem={newItem}
+                    categories={categories}
+                    selectedCategories={selectedCategories}
+                    onInputChange={handleInputChange}
+                    onCategorySelection={handleCategorySelection}
+                    onCreateItem={editItem ? handleUpdateItem : handleCreateItem}
+                    editMode={!!editItem}
+                />
+            </div>
         </div>
     );
 };
@@ -181,13 +187,13 @@ const ItemsTable = ({ items, onEditItem, onDeleteItem }) => (
                                     onClick={() => onEditItem(item)}
                                     className={`${styles.button} ${styles.editButton}`}
                                 >
-                                    <Image src={Edit} alt=""/>
+                                    <Image src={Edit} alt="" />
                                 </button>
                                 <button
                                     onClick={() => onDeleteItem(item.id)}
                                     className={`${styles.button} ${styles.deleteButton}`}
                                 >
-                                    <Image src={Delete} alt=""/>
+                                    <Image src={Delete} alt="" />
                                 </button>
                             </td>
                         </tr>
@@ -199,14 +205,14 @@ const ItemsTable = ({ items, onEditItem, onDeleteItem }) => (
 );
 
 const NewItemForm = ({
-                         newItem,
-                         categories,
-                         selectedCategories,
-                         onInputChange,
-                         onCategorySelection,
-                         onCreateItem,
-                         editMode
-                     }) => (
+    newItem,
+    categories,
+    selectedCategories,
+    onInputChange,
+    onCategorySelection,
+    onCreateItem,
+    editMode
+}) => (
     <div className={styles.container}>
         <h2>{editMode ? 'Редактировать товар' : 'Добавить новый товар'}</h2>
         <div className={styles.gridContainer}>
