@@ -29,9 +29,23 @@ const OrdersManagement = () => {
         }
     };
 
-    const handleGoToAssembly = (boxId) => {
-        router.push(`/admin/box-assembly/${boxId}`);
+    const handleGoToAssembly = async (boxId) => {
+        try {
+            await axios.patch(
+                `${config.apiUrl}/collector/order-items/${boxId}/assign-collector`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                    },
+                }
+            );
+            router.push(`/admin/box-assembly/${boxId}`);
+        } catch (error) {
+            console.error('Ошибка при назначении сборщика:', error);
+        }
     };
+
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleString('ru-RU', {

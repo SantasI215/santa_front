@@ -53,6 +53,7 @@ const HistoryOrdersManagement = () => {
                         <div key={order.id} className={styles.orderCard}>
                             <div className={styles.orderHeader}>
                                 <p>Заказ #{order.id}</p>
+                                <p>Собирает: {order.collector_name}</p>
                                 <span className={styles.status}>{order.status}</span>
                             </div>
                             <div className={styles.orderUser}>

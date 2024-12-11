@@ -32,14 +32,13 @@ export default function Login() {
             });
     
           
-            Cookies.set('token', response.data.token, { expires: 7 }); //Зачем заморочился на куки? и с локальным хранилищем нормально было
+            Cookies.set('token', response.data.token, { expires: 7 });
             alert('Успешный вход!');
 
             
-            if (response.data.user.role === 'admin') {
+            if (response.data.user.role === 'admin' || response.data.user.role === 'collector') {
                 router.push('/admin/dashboard');  
-            }
-            if (response.data.user.role === 'user') {
+            } else {
                 router.push('/');
             }
         } catch (err) {

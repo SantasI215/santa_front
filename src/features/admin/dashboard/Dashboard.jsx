@@ -18,6 +18,15 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [activeComponent, setActiveComponent] = useState('profile');
 
+    useEffect(() => {
+        const checkUserRole = async () => {
+            if (userData?.role === 'user') {
+                await router.push("/");
+            }
+        };
+        checkUserRole();
+    }, [userData]);
+
     const handleLogout = async () => {
         try {
             await axios.post(`${config.apiUrl}/logout`, {}, {
@@ -64,7 +73,6 @@ const Dashboard = () => {
             case 'history-orders':
                 return <HistoryOrdersManagement />;
             case 'orders':
-                // Проверяем роль перед рендерингом OrdersManagement
                 if (userData?.role === 'collector') {
                     return <OrdersManagement />;
                 } else {
