@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import config from '@/pages/api/config';
@@ -16,6 +16,7 @@ const BoxesManagement = () => {
     const [editBox, setEditBox] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const formRef = useRef(null);
 
     // Загрузка списка боксов и категорий
     useEffect(() => {
@@ -31,6 +32,13 @@ const BoxesManagement = () => {
                     }),
                 ]);
                 setBoxes(boxesResponse.data || []);
+                setCategories(categoriesResponse.data || []);
+                const boxesWithStatus = (boxesResponse.data || []).map((box) => ({
+                    ...box,
+                    isActive: box.categories && box.categories.length > 0, // Определение состояния
+                }));
+
+                setBoxes(boxesWithStatus);
                 setCategories(categoriesResponse.data || []);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -69,9 +77,9 @@ const BoxesManagement = () => {
                     headers: { Authorization: `Bearer ${Cookies.get('token')}` },
                 }
             );
-            setBoxes((prevBoxes) => [response.data.box, ...prevBoxes]); // Добавляем новый бокс
-            setNewBox({ name: '', description: '', price: '' }); // Сброс формы
-            setSelectedCategories([]); // Сброс выбранных категорий
+            setBoxes((prevBoxes) => [response.data.box, ...prevBoxes]);
+            setNewBox({ name: '', description: '', price: '' });
+            setSelectedCategories([]);
         } catch (error) {
             console.error('Error creating box:', error);
             setError('Не удалось создать бокс.');
@@ -86,7 +94,8 @@ const BoxesManagement = () => {
             description: box.description,
             price: box.price,
         });
-        setSelectedCategories(box.categories.map((category) => category.id)); // Выбор категорий
+        setSelectedCategories(box.categories.map((category) => category.id));
+        formRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     // Обновление бокса
@@ -145,6 +154,7 @@ const BoxesManagement = () => {
                                             <th>Описание</th>
                                             <th>Цена</th>
                                             <th>Категории</th>
+                                            <th>Статус</th>
                                             <th>Действие</th>
                                         </tr>
                                     </thead>
@@ -157,6 +167,7 @@ const BoxesManagement = () => {
                                                 <td>
                                                     {box.categories?.map((category) => category.name).join(', ') || 'Нет категорий'}
                                                 </td>
+                                                <td>{box.isActive ? 'Активный' : 'Неактивный'}</td> 
                                                 <td className={styles.buttonSection}>
                                                     <button
                                                         onClick={() => editBoxData(box)}
@@ -179,70 +190,71 @@ const BoxesManagement = () => {
                     {error && <p className={styles.error}>{error}</p>}
 
                     {/* Форма для добавления или редактирования бокса */}
-                    <div className={styles.container}>
-                        <h2>{editBox ? 'Редактировать бокс' : 'Добавить новый бокс'}</h2>
-                        <div className={styles.gridContainer}>
-                            <div className={styles.inputBlock}>
-                                <div className={styles.itemContent}>
-                                    <label>Название бокса</label>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={newBox.name}
-                                        onChange={handleBoxInputChange}
-                                        placeholder="Название бокса"
-                                    />
+                    <div ref={formRef}>
+                        <div className={styles.container}>
+                            <h2>{editBox ? 'Редактировать бокс' : 'Добавить новый бокс'}</h2>
+                            <div className={styles.gridContainer}>
+                                <div className={styles.inputBlock}>
+                                    <div className={styles.itemContent}>
+                                        <label>Название бокса</label>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={newBox.name}
+                                            onChange={handleBoxInputChange}
+                                            placeholder="Название бокса"
+                                        />
+                                    </div>
+                                    <div className={styles.itemContent}>
+                                        <label>Описание бокса</label>
+                                        <textarea
+                                            name="description"
+                                            value={newBox.description}
+                                            onChange={handleBoxInputChange}
+                                            placeholder="Описание бокса"
+                                            disabled={!!editBox} // Заблокировать при редактировании
+                                        />
+                                    </div>
+                                    <div className={styles.itemContent}>
+                                        <label>Цена</label>
+                                        <input
+                                            type="number"
+                                            name="price"
+                                            value={newBox.price}
+                                            onChange={handleBoxInputChange}
+                                            placeholder="Цена"
+                                            disabled={!!editBox} // Заблокировать при редактировании
+                                        />
+                                    </div>
                                 </div>
                                 <div className={styles.itemContent}>
-                                    <label>Описание бокса</label>
-                                    <textarea
-                                        name="description"
-                                        value={newBox.description}
-                                        onChange={handleBoxInputChange}
-                                        placeholder="Описание бокса"
-                                        disabled={!!editBox} // Заблокировать при редактировании
-                                    />
-                                </div>
-                                <div className={styles.itemContent}>
-                                    <label>Цена</label>
-                                    <input
-                                        type="number"
-                                        name="price"
-                                        value={newBox.price}
-                                        onChange={handleBoxInputChange}
-                                        placeholder="Цена"
-                                        disabled={!!editBox} // Заблокировать при редактировании
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.itemContent}>
-                                <p>Выберите категории:</p>
-                                <div className={styles.newItemCategoryBlock}>
-                                    <div className={styles.newItemCategoryContent}>
-                                        {categories.length > 0 ? (
-                                            categories.map((category) => (
-                                                <label key={category.id} className={styles.categoryLabel}>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={selectedCategories.includes(category.id)}
-                                                        onChange={() => onCategorySelection(category.id)}
-                                                        disabled={!!editBox} // Заблокировать при редактировании
-                                                    />
-                                                    {category.name}
-                                                </label>
-                                            ))
-                                        ) : (
-                                            <p>Категорий пока нет.</p>
-                                        )}
+                                    <p>Выберите категории:</p>
+                                    <div className={styles.newItemCategoryBlock}>
+                                        <div className={styles.newItemCategoryContent}>
+                                            {categories.length > 0 ? (
+                                                categories.map((category) => (
+                                                    <label key={category.id} className={styles.categoryLabel}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedCategories.includes(category.id)}
+                                                            onChange={() => onCategorySelection(category.id)}
+                                                            disabled={!!editBox} // Заблокировать при редактировании
+                                                        />
+                                                        {category.name}
+                                                    </label>
+                                                ))
+                                            ) : (
+                                                <p>Категорий пока нет.</p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <button onClick={editBox ? updateBox : createBox} className="btn">
+                                {editBox ? 'Обновить бокс' : 'Создать бокс'}
+                            </button>
                         </div>
-                        <button onClick={editBox ? updateBox : createBox} className="btn">
-                            {editBox ? 'Обновить бокс' : 'Создать бокс'}
-                        </button>
                     </div>
-
                 </>
             )}
         </div>
