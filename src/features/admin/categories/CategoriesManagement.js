@@ -41,6 +41,10 @@ const CategoriesManagement = () => {
 
     const createCategory = async (e) => {
         e.preventDefault();
+        if (!newCategory.name.trim()) {
+            alert('Название категории не может быть пустым!');
+            return;
+        }
         try {
             const response = await axios.post(
                 `${config.apiUrl}/admin/categories`,
@@ -63,6 +67,10 @@ const CategoriesManagement = () => {
     };
 
     const saveEditCategory = async () => {
+        if (!editCategory.name.trim()) {
+            alert('Название категории не может быть пустым!');
+            return;
+        }
         try {
             const response = await axios.put(
                 `${config.apiUrl}/admin/categories/${editCategory.id}`,
@@ -142,13 +150,13 @@ const CategoriesManagement = () => {
                                                 onClick={() => startEditCategory(category)}
                                                 className={`${styles.button} ${styles.editButton}`}
                                             >
-                                                <Image src={Edit} alt=""/>
+                                                <Image src={Edit} alt="" />
                                             </button>
                                             <button
                                                 onClick={() => deleteCategory(category.id)}
                                                 className={`${styles.button} ${styles.deleteButton}`}
                                             >
-                                                <Image src={Delete} alt=""/>
+                                                <Image src={Delete} alt="" />
                                             </button>
                                         </td>
                                     </tr>

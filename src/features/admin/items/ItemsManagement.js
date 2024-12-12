@@ -81,6 +81,12 @@ const ItemsManagement = () => {
     };
 
     const handleUpdateItem = async () => {
+        // Проверяем, что все обязательные поля заполнены
+        if (!newItem.name.trim() || !newItem.price || !newItem.quantity) {
+            alert('Пожалуйста, заполните все поля.');
+            return;
+        }
+
         try {
             const updatedItem = await axios.put(
                 `${config.apiUrl}/admin/items/${editItem.id}`,
@@ -105,6 +111,12 @@ const ItemsManagement = () => {
     };
 
     const handleCreateItem = async () => {
+        // Проверяем, что все обязательные поля заполнены
+        if (!newItem.name.trim() || !newItem.price || !newItem.quantity) {
+            alert('Пожалуйста, заполните все поля.');
+            return;
+        }
+
         try {
             const createdItem = await createNewItem(newItem, selectedCategories);
             setItems((prev) => [createdItem, ...prev]);
