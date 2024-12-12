@@ -9,6 +9,7 @@ const HistoryOrdersManagement = () => {
     const router = useRouter();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchId, setSearchId] = useState(null);
 
     useEffect(() => {
         fetchOrders();
@@ -20,6 +21,7 @@ const HistoryOrdersManagement = () => {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
+                params: { order_id: searchId },
             });
             setOrders(response.data);
             setLoading(false);
@@ -29,6 +31,9 @@ const HistoryOrdersManagement = () => {
         }
     };
 
+    const handleSearch = () => {
+        fetchOrders(searchId);
+    }
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleString('ru-RU', {
@@ -40,12 +45,26 @@ const HistoryOrdersManagement = () => {
         });
     };
 
+    const getCollectorName = (name) => {
+        return name === null ? "Никто не собирает" : `Собрал: ${name}`;
+    };
+
     if (loading) {
         return <div>Загрузка...</div>;
     }
 
     return (
         <div className={styles.content}>
+            <div className={styles.searchContainer}>
+                <input
+                    type="text"
+                    placeholder="Введите номер заказа"
+                    value={searchId}
+                    onChange={(e) => setSearchId(e.target.value)}
+                    className={styles.searchInput}
+                />
+                <button onClick={handleSearch} className={`btn ${styles.searchButton}`}>Найти</button>
+            </div>
             <h2>История заказов</h2>
             <div className={styles.gridContainer}>
                 {orders.length > 0 ? (
@@ -53,7 +72,6 @@ const HistoryOrdersManagement = () => {
                         <div key={order.id} className={styles.orderCard}>
                             <div className={styles.orderHeader}>
                                 <p>Заказ #{order.id}</p>
-                                <p>Собирает: {order.collector_name}</p>
                                 <span className={styles.status}>{order.status}</span>
                             </div>
                             <div className={styles.orderUser}>
@@ -65,30 +83,33 @@ const HistoryOrdersManagement = () => {
                                 <p><span>Сумма заказа:</span> {order.total_price}₽</p>
                                 <p><span>Способ оплаты:</span> {order.payment_method}</p>
                             </div>
-                            {/*<div className={styles.orderBoxesContent}>
+                            <div className={styles.orderBoxesContent}>
                                 <p>Детали заказа:</p>
                                 <div className={styles.orderItems}>
                                     {order.order_items && order.order_items.length > 0 ? (
                                         order.order_items.map((item) => (
                                             <div key={item.id} className={styles.orderItem}>
                                                 <p><span>Статус: </span>{item.status}</p>
+                                                <p><span>{getCollectorName(item.collector_name)}</span></p>
                                                 <p><span>Название: </span> {item.box.name}</p>
                                                 <p><span>Цена: </span> {item.price}₽</p>
-                                                <div className={styles.boxButtons}>
-                                                    <button
-                                                        className="btn"
-                                                        onClick={() => handleGoToAssembly(item.id)}
-                                                    >
-                                                        Перейти к сборке
-                                                    </button>
-                                                </div>
+                                                {item.status === "Собран" && (
+                                                    <div className={styles.boxButtons}>
+                                                        <button
+                                                            className="btn"
+                                                            onClick={() => router.push(`/admin/box-assembly/${item.id}`)}
+                                                        >
+                                                            Просмотр
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </div>
                                         ))
                                     ) : (
                                         <p>Нет товаров в заказе.</p>
                                     )}
                                 </div>
-                            </div>*/}
+                            </div>
                         </div>
                     ))
                 ) : (

@@ -1,11 +1,12 @@
 .boxContent {
+    min-width: 320px;
     padding-top: var(--spacing);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--spacing);
 
     @media (max-width: 1440px) {
-        grid-template-columns: repeat(2, minmax(2, 2fr));
+        grid-template-columns: repeat(2, minmax(0, 2fr));
     }
 
     @media (max-width: 920px) {

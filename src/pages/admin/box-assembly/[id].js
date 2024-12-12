@@ -33,7 +33,7 @@ const BoxAssembly = () => {
     const initializeBox = async () => {
         try {
             // Получаем информацию о боксе
-            const boxResponse = await axios.get(`${config.apiUrl}/collector/boxes/${id}/items`, {
+            const boxResponse = await axios.get(`${config.apiUrl}/boxes/${id}/items`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },

@@ -5,8 +5,8 @@ import styles from './Box.module.css';
 import BoxImage from '@/assets/img/Box.png';
 import Image from "next/image";
 import Link from "next/link";
-import Preloader from "@/components/Preloader";
 import Cookies from "js-cookie";
+import PreloaderRelative from "@/components/PreloaderRelative";
 
 // Общий компонент для работы с боксовыми страницами
 const BoxList = ({ apiEndpoint, title }) => {
@@ -54,11 +54,12 @@ const BoxList = ({ apiEndpoint, title }) => {
         }
     };
 
-    if (loading) return <Preloader />;
+    if (loading) return <PreloaderRelative />;
     if (error) return <div>{error}</div>;
 
     return (
         <div className="container">
+
             <h2>{title}</h2>
             <ul className={styles.boxContent}>
                 {boxes.map(box => (
