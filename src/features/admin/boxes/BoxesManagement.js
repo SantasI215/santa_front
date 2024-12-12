@@ -69,6 +69,13 @@ const BoxesManagement = () => {
     // Создание нового бокса
     const createBox = async () => {
         setError(null);
+
+        // Проверка на заполненность формы
+        if (!newBox.name.trim() || !newBox.description.trim() || !newBox.price.trim()) {
+            setError('Пожалуйста, заполните все поля формы.');
+            return;
+        }
+
         try {
             const response = await axios.post(
                 `${config.apiUrl}/boxes`,
@@ -102,6 +109,13 @@ const BoxesManagement = () => {
     const updateBox = async () => {
         if (!editBox) return;
         setError(null);
+
+        // Проверка на заполненность формы
+        if (!newBox.name.trim() || !newBox.description.trim() || !newBox.price.trim()) {
+            setError('Пожалуйста, заполните все поля формы.');
+            return;
+        }
+
         try {
             const response = await axios.put(
                 `${config.apiUrl}/admin/boxes/${editBox.id}`,
@@ -110,9 +124,9 @@ const BoxesManagement = () => {
                     headers: { Authorization: `Bearer ${Cookies.get('token')}` },
                 }
             );
-            // setBoxes((prevBoxes) =>
-            //     prevBoxes.map((box) => (box.id === response.data.box.id ? response.data.box : box))
-            // ); // Обновляем бокс в списке
+            setBoxes((prevBoxes) =>
+                prevBoxes.map((box) => (box.id === response.data.box.id ? response.data.box : box))
+            ); // Обновляем бокс в списке
             setEditBox(null); // Сброс редактируемого бокса
             setNewBox({ name: '', description: '', price: '' });
             setSelectedCategories([]);
@@ -158,7 +172,7 @@ const BoxesManagement = () => {
                                             <th>Действие</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody>ч
                                         {boxes.map((box) => (
                                             <tr key={box.id}>
                                                 <td>{box.name}</td>
@@ -167,7 +181,7 @@ const BoxesManagement = () => {
                                                 <td>
                                                     {box.categories?.map((category) => category.name).join(', ') || 'Нет категорий'}
                                                 </td>
-                                                <td>{box.isActive ? 'Активный' : 'Неактивный'}</td> 
+                                                <td>{box.isActive ? 'Активный' : 'Неактивный'}</td>
                                                 <td className={styles.buttonSection}>
                                                     <button
                                                         onClick={() => editBoxData(box)}
