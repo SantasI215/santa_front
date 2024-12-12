@@ -12,7 +12,7 @@ const BoxesManagement = () => {
     const [boxes, setBoxes] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
-    const [newBox, setNewBox] = useState({ name: '', description: '', price: '' });
+    const [newBox, setNewBox] = useState({ name: '', description: '', price: '', is_active: true });
     const [editBox, setEditBox] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -32,13 +32,6 @@ const BoxesManagement = () => {
                     }),
                 ]);
                 setBoxes(boxesResponse.data || []);
-                setCategories(categoriesResponse.data || []);
-                const boxesWithStatus = (boxesResponse.data || []).map((box) => ({
-                    ...box,
-                    isActive: box.categories && box.categories.length > 0, // Определение состояния
-                }));
-
-                setBoxes(boxesWithStatus);
                 setCategories(categoriesResponse.data || []);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -85,7 +78,7 @@ const BoxesManagement = () => {
                 }
             );
             setBoxes((prevBoxes) => [response.data.box, ...prevBoxes]);
-            setNewBox({ name: '', description: '', price: '' });
+            setNewBox({ name: '', description: '', price: '', is_active: true });
             setSelectedCategories([]);
         } catch (error) {
             console.error('Error creating box:', error);
@@ -100,6 +93,7 @@ const BoxesManagement = () => {
             name: box.name,
             description: box.description,
             price: box.price,
+            is_active: box.is_active,
         });
         setSelectedCategories(box.categories.map((category) => category.id));
         formRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -124,11 +118,12 @@ const BoxesManagement = () => {
                     headers: { Authorization: `Bearer ${Cookies.get('token')}` },
                 }
             );
-            setBoxes((prevBoxes) =>
-                prevBoxes.map((box) => (box.id === response.data.box.id ? response.data.box : box))
-            ); // Обновляем бокс в списке
+            // Обновляем бокс в списке
+            // setBoxes((prevBoxes) =>
+            //     prevBoxes.map((box) => (box.id === response.data.box.id ? response.data.box : box))
+            // );
             setEditBox(null); // Сброс редактируемого бокса
-            setNewBox({ name: '', description: '', price: '' });
+            setNewBox({ name: '', description: '', price: '', active: true });
             setSelectedCategories([]);
         } catch (error) {
             console.error('Error updating box:', error);
@@ -136,18 +131,6 @@ const BoxesManagement = () => {
         }
     };
 
-    // // Удаление бокса
-    // const deleteBox = async (boxId) => {
-    //     try {
-    //         await axios.delete(`${config.apiUrl}/admin/boxes/${boxId}`, {
-    //             headers: { Authorization: `Bearer ${Cookies.get('token')}` },
-    //         });
-    //         setBoxes((prevBoxes) => prevBoxes.filter((box) => box.id !== boxId));
-    //     } catch (error) {
-    //         console.error('Error deleting box:', error);
-    //         setError('Не удалось удалить бокс.');
-    //     }
-    // };
 
     return (
         <div className={styles.content}>
@@ -172,7 +155,7 @@ const BoxesManagement = () => {
                                             <th>Действие</th>
                                         </tr>
                                     </thead>
-                                    <tbody>ч
+                                    <tbody>
                                         {boxes.map((box) => (
                                             <tr key={box.id}>
                                                 <td>{box.name}</td>
@@ -181,13 +164,15 @@ const BoxesManagement = () => {
                                                 <td>
                                                     {box.categories?.map((category) => category.name).join(', ') || 'Нет категорий'}
                                                 </td>
-                                                <td>{box.isActive ? 'Активный' : 'Неактивный'}</td>
+                                                <td>
+                                                    {box.is_active ? 'Неактивный' : 'Активный'}
+                                                </td>
                                                 <td className={styles.buttonSection}>
                                                     <button
                                                         onClick={() => editBoxData(box)}
                                                         className={`${styles.button} ${styles.editButton}`}
                                                     >
-                                                        <Image src={Edit} alt="" />
+                                                        <Image src={Edit} alt="Редактировать" />
                                                     </button>
                                                 </td>
                                             </tr>
@@ -239,6 +224,17 @@ const BoxesManagement = () => {
                                             placeholder="Цена"
                                             disabled={!!editBox} // Заблокировать при редактировании
                                         />
+                                    </div>
+                                    <div className={styles.itemContent}>
+                                        <label>Статус</label>
+                                        <select
+                                            name="is_active"
+                                            value={newBox.is_active}
+                                            onChange={handleBoxInputChange}
+                                        >
+                                            <option value={true}>Активный</option>
+                                            <option value={false}>Неактивный</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className={styles.itemContent}>
