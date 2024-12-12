@@ -279,6 +279,20 @@ textarea {
 }
 
 /* Стили для блока с загрузкой */
+.preloader-relative {
+  min-height: 300px;
+  position: relative;
+}
+
+.preloader-relative div {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .preloader {
   z-index: 10;
   position: absolute;
@@ -288,6 +302,7 @@ textarea {
   left: 0;
   right: 0;
 }
+
 .loading {
   display: flex;
   justify-content: center;
@@ -298,7 +313,28 @@ textarea {
   color: #333;
 }
 
+.loading-relative {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
 .loading::after {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 4px solid #ccc;
+  border-top: 4px solid #124333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-relative::after {
   content: '';
   display: inline-block;
   width: 24px;

@@ -54,9 +54,9 @@
 }
 
 .infoContainer {
+    position: relative;
     height: 100vh;
     overflow-y: scroll;
-    position: relative;
     padding: var(--distance);
 }
 
@@ -239,10 +239,23 @@
     gap: calc(var(--spacing) / 2);
 }
 
+.orderItemsContent {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: calc(var(--spacing) / 2);
+}
+
+.orderItemInfo {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 3);
+}
+
 .orderItem {
     padding: 10px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: calc(var(--spacing) / 2);
     border-radius: var(--radius);
     border: 1px solid var(--main);
@@ -264,4 +277,28 @@
 
 .boxAssemblyItems {
     display: flex;
+}
+
+.searchContainer {
+    position: sticky;
+    left: 0;
+    right: 0;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.searchInput {
+    background: var(--white);
+    width: 100%;
+    height: 50px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.searchButton {
+    height: 50px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
