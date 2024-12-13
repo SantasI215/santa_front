@@ -89,7 +89,7 @@ const BoxList = ({ apiEndpoint, title }) => {
 export function OurBoxes() {
     return (
         <div className="box">
-            <BoxList apiEndpoint="all-boxes" title="Наши боксы"/>
+            <BoxList apiEndpoint="index-all" title="Наши боксы"/>
         </div>
     );
 }
