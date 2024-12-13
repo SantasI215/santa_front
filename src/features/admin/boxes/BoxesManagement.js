@@ -12,7 +12,7 @@ const BoxesManagement = () => {
     const [boxes, setBoxes] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
-    const [newBox, setNewBox] = useState({ name: '', description: '', price: '', is_active: true });
+    const [newBox, setNewBox] = useState({ name: '', description: '', price: '', active: '' });
     const [editBox, setEditBox] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -24,7 +24,7 @@ const BoxesManagement = () => {
             setLoading(true);
             try {
                 const [boxesResponse, categoriesResponse] = await Promise.all([
-                    axios.get(`${config.apiUrl}/all-boxes`, {
+                    axios.get(`${config.apiUrl}/admin/all-boxes`, {
                         headers: { Authorization: `Bearer ${Cookies.get('token')}` },
                     }),
                     axios.get(`${config.apiUrl}/categories`, {
@@ -47,7 +47,10 @@ const BoxesManagement = () => {
     // Обработка ввода для нового бокса или редактирования
     const handleBoxInputChange = (e) => {
         const { name, value } = e.target;
-        setNewBox((prev) => ({ ...prev, [name]: value }));
+        setNewBox((prev) => ({
+            ...prev,
+            [name]: name === 'active' ? value : value, // Отправляем строку 'true' или 'false'
+        }));
     };
 
     // Обработка выбора категорий
@@ -61,25 +64,17 @@ const BoxesManagement = () => {
 
     // Создание нового бокса
     const createBox = async () => {
-        setError(null);
-
-        // Проверка на заполненность формы
-        if (!newBox.name.trim() || !newBox.description.trim() || !newBox.price.trim()) {
-            setError('Пожалуйста, заполните все поля формы.');
-            return;
-        }
-
         try {
             const response = await axios.post(
                 `${config.apiUrl}/boxes`,
-                { ...newBox, categories: selectedCategories },
                 {
-                    headers: { Authorization: `Bearer ${Cookies.get('token')}` },
-                }
+                    ...newBox,
+                    categories: selectedCategories,
+                },
+                { headers: { Authorization: `Bearer ${Cookies.get('token')}` } }
             );
+            // Обновление списка боксов
             setBoxes((prevBoxes) => [response.data.box, ...prevBoxes]);
-            setNewBox({ name: '', description: '', price: '', is_active: true });
-            setSelectedCategories([]);
         } catch (error) {
             console.error('Error creating box:', error);
             setError('Не удалось создать бокс.');
@@ -93,7 +88,7 @@ const BoxesManagement = () => {
             name: box.name,
             description: box.description,
             price: box.price,
-            is_active: box.is_active,
+            active: box.active,
         });
         setSelectedCategories(box.categories.map((category) => category.id));
         formRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -102,35 +97,24 @@ const BoxesManagement = () => {
     // Обновление бокса
     const updateBox = async () => {
         if (!editBox) return;
-        setError(null);
-
-        // Проверка на заполненность формы
-        if (!newBox.name.trim() || !newBox.description.trim() || !newBox.price.trim()) {
-            setError('Пожалуйста, заполните все поля формы.');
-            return;
-        }
-
         try {
             const response = await axios.put(
                 `${config.apiUrl}/admin/boxes/${editBox.id}`,
-                { ...newBox, categories: selectedCategories },
                 {
-                    headers: { Authorization: `Bearer ${Cookies.get('token')}` },
-                }
+                    ...newBox,
+                    categories: selectedCategories,
+                },
+                { headers: { Authorization: `Bearer ${Cookies.get('token')}` } }
             );
-            // Обновляем бокс в списке
+
             // setBoxes((prevBoxes) =>
             //     prevBoxes.map((box) => (box.id === response.data.box.id ? response.data.box : box))
             // );
-            setEditBox(null); // Сброс редактируемого бокса
-            setNewBox({ name: '', description: '', price: '', active: true });
-            setSelectedCategories([]);
         } catch (error) {
             console.error('Error updating box:', error);
             setError('Не удалось обновить бокс.');
         }
     };
-
 
     return (
         <div className={styles.content}>
@@ -165,7 +149,7 @@ const BoxesManagement = () => {
                                                     {box.categories?.map((category) => category.name).join(', ') || 'Нет категорий'}
                                                 </td>
                                                 <td>
-                                                    {box.is_active ? 'Неактивный' : 'Активный'}
+                                                    {box.active}
                                                 </td>
                                                 <td className={styles.buttonSection}>
                                                     <button
@@ -228,12 +212,12 @@ const BoxesManagement = () => {
                                     <div className={styles.itemContent}>
                                         <label>Статус</label>
                                         <select
-                                            name="is_active"
-                                            value={newBox.is_active}
+                                            name="active"
+                                            value={newBox.active}
                                             onChange={handleBoxInputChange}
                                         >
-                                            <option value={true}>Активный</option>
-                                            <option value={false}>Неактивный</option>
+                                            <option value="Активный">Активный</option>
+                                            <option value="Неактивный">Неактивный</option>
                                         </select>
                                     </div>
                                 </div>
