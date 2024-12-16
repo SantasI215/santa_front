@@ -1,26 +1,29 @@
+// BoxList.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import config from "@/pages/api/config";
 import styles from './Box.module.css';
+import Filters from './../filters/Filters';
 import BoxImage from '@/assets/img/Box.png';
 import Image from "next/image";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import PreloaderRelative from "@/components/PreloaderRelative";
+import api from "js-cookie";
 
-// Общий компонент для работы с боксовыми страницами
 const BoxList = ({ apiEndpoint, title }) => {
     const [boxes, setBoxes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [inCart, setInCart] = useState([]); // Список ID добавленных боксов
+    const [filteredBoxes, setFilteredBoxes] = useState([]); // Отфильтрованные боксы
 
-    // Загружаем боксы
     useEffect(() => {
         const fetchBoxes = async () => {
             try {
                 const response = await axios.get(`${config.apiUrl}/${apiEndpoint}`);
                 setBoxes(response.data);
+                setFilteredBoxes(response.data); // Изначально все боксы отображаются
             } catch (err) {
                 setError('Ошибка при загрузке боксов');
             } finally {
@@ -31,20 +34,17 @@ const BoxList = ({ apiEndpoint, title }) => {
         fetchBoxes();
     }, [apiEndpoint]);
 
-    // Функция добавления товара в корзину
     const addToCart = async (id) => {
         try {
-            const token = Cookies.get('token'); // Получаем токен из cookies
+            const token = Cookies.get('token');
 
-            // Отправка POST запроса на добавление товара в корзину
             const response = await axios.post(
                 `${config.apiUrl}/cart/add/${id}`,
-                { box_id: id }, // Параметры запроса
-                { headers: { Authorization: `Bearer ${token}` } } // Добавление авторизационного токена
+                { box_id: id },
+                { headers: { Authorization: `Bearer ${token}` } }
             );
-            alert("Успешно!");
 
-            // Обновление состояния корзины
+            alert("Успешно!");
             if (response.status === 200 && response.data.cartItemId) {
                 setInCart([...inCart, response.data.cartItemId]);
             }
@@ -54,37 +54,63 @@ const BoxList = ({ apiEndpoint, title }) => {
         }
     };
 
+    useEffect(() => {
+        console.log(boxes); // Проверяем, что данные содержат поле categories
+    }, [boxes]);
+
+    const handleFilterChange = (selectedCategories) => {
+        if (selectedCategories.length === 0) {
+            setFilteredBoxes(boxes); // Показываем все боксы, если фильтры не выбраны
+        } else {
+            const filtered = boxes.filter(box =>
+                box.categories.some(category => selectedCategories.includes(category.id)) // Проверяем связь
+            );
+            setFilteredBoxes(filtered);
+        }
+    };
+
+
     if (loading) return <PreloaderRelative />;
     if (error) return <div>{error}</div>;
 
     return (
         <div className="container">
-
             <h2>{title}</h2>
-            <ul className={styles.boxContent}>
-                {boxes.map(box => (
-                    <li key={box.id} className={styles.boxItem}>
-                        <Link href={`/boxes/${box.id}`}>
-                            <div className={styles.boxInfo}>
-                                <Image src={BoxImage} alt={box.name}/>
-                                <p>{box.name}</p>
+            <div className={apiEndpoint === "new-boxes" ? styles.box : styles.boxWrapper}>
+                {apiEndpoint !== "new-boxes" && (
+                    <div className={styles.filtersBlock}>
+                        <Filters
+                            onFilterChange={handleFilterChange}
+                        />
+                    </div>
+                )}
+                <ul className={styles.boxContent}>
+                    {filteredBoxes.map(box => (
+                        <li key={box.id} className={styles.boxItem}>
+                            <Link href={`/boxes/${box.id}`}>
+                                <div className={styles.boxInfo}>
+                                    <Image src={BoxImage} alt={box.name}/>
+                                    <p>{box.name}</p>
+                                </div>
+                            </Link>
+                            <div className={styles.boxPrice}>
+                                <h3>{box.price} ₽</h3>
+                                <button
+                                    className="btn"
+                                    onClick={() => addToCart(box.id)}
+                                >
+                                    Купить
+                                </button>
                             </div>
-                        </Link>
-                        <div className={styles.boxPrice}>
-                            <h3>{box.price} ₽</h3>
-                            <button
-                                className="btn"
-                                onClick={() => addToCart(box.id)}
-                            >
-                                Купить
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };
+
+export default BoxList;
 
 export function OurBoxes() {
     return (
@@ -95,5 +121,5 @@ export function OurBoxes() {
 }
 
 export function OurBoxesNew() {
-    return <BoxList apiEndpoint="new-boxes" title="Новые боксы" />;
+    return <BoxList apiEndpoint="new-boxes" title="Новые боксы"/>;
 }

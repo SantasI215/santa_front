@@ -1,3 +1,11 @@
+.boxWrapper{
+    display: grid;
+    grid-template-columns: 200px auto;
+    gap:20px;
+}
+
+.box{}
+
 .boxContent {
     min-width: 320px;
     padding-top: var(--spacing);
