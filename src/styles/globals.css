@@ -9,7 +9,7 @@
   --main-hover: #dda86c;
   --accent: #124333;
 
-  --spacing: 40px;
+  --spacing: 20px;
   --distance: 60px;
 
   --radius: 20px;
@@ -67,6 +67,8 @@ html {
 
 html,
 body {
+  min-height: 100%;
+  height: 100%;
   margin: 0 auto;
   overflow-x: hidden;
 }
@@ -78,6 +80,12 @@ body {
   color: var(--main);
   font-style: normal;
   font-size: 24px;
+}
+
+#__next {
+  min-height: 100%;;
+  display: grid;
+  grid-template-rows: 1fr auto;
 }
 
 .container {

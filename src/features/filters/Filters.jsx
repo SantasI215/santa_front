@@ -4,11 +4,10 @@ import axios from "axios";
 import config from "@/pages/api/config";
 
 const Filters = ({ onFilterChange }) => {
-    const [categories, setCategories] = useState([]); // Список категорий
-    const [selectedCategories, setSelectedCategories] = useState([]); // Выбранные категории
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Состояние выпадающего списка
+    const [categories, setCategories] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    // Загружаем категории с сервера
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -22,20 +21,17 @@ const Filters = ({ onFilterChange }) => {
         fetchCategories();
     }, []);
 
-    // Обработчик изменения выбора категорий
     const handleCategoryChange = (categoryId) => {
         let updatedCategories;
 
         if (selectedCategories.includes(categoryId)) {
-            // Убираем категорию из выбранных
-            updatedCategories = selectedCategories.filter(id => id !== categoryId);
+            updatedCategories = selectedCategories.filter((id) => id !== categoryId);
         } else {
-            // Добавляем категорию в выбранные
             updatedCategories = [...selectedCategories, categoryId];
         }
 
         setSelectedCategories(updatedCategories);
-        onFilterChange(updatedCategories); // Передаём изменения в родительский компонент
+        onFilterChange(updatedCategories); // Передаем обновленный список в родительский компонент
     };
 
     return (
@@ -50,7 +46,7 @@ const Filters = ({ onFilterChange }) => {
                 <div className={styles.dropdownContent}>
                     <h3>Выберите категории</h3>
                     <ul className={styles.filterList}>
-                        {categories.map(category => (
+                        {categories.map((category) => (
                             <li key={category.id}>
                                 <label>
                                     <input
