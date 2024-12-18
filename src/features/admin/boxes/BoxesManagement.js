@@ -7,6 +7,7 @@ import Preloader from "@/components/Preloader";
 import Delete from '@/assets/img/Delete.svg';
 import Edit from '@/assets/img/Edit.svg';
 import Image from "next/image";
+import box from "@/features/box/Box";
 
 const BoxesManagement = () => {
     const [boxes, setBoxes] = useState([]);
@@ -14,6 +15,8 @@ const BoxesManagement = () => {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [newBox, setNewBox] = useState({ name: '', description: '', price: '', active: '' });
     const [editBox, setEditBox] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const formRef = useRef(null);
@@ -53,6 +56,12 @@ const BoxesManagement = () => {
         }));
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setImageFile(file);
+        setImagePreview(URL.createObjectURL(file)); // Создаём preview изображения
+    };
+
     // Обработка выбора категорий
     const onCategorySelection = (categoryId) => {
         setSelectedCategories((prev) =>
@@ -64,52 +73,88 @@ const BoxesManagement = () => {
 
     // Создание нового бокса
     const createBox = async () => {
+        const formData = new FormData();
+        formData.append("name", newBox.name);
+        formData.append("description", newBox.description);
+        formData.append("price", newBox.price);
+        formData.append("active", newBox.active);
+        selectedCategories.forEach((categoryId) => {
+            formData.append("categories[]", categoryId);
+        });
+        if (imageFile) {
+            formData.append("image", imageFile); // Добавляем файл изображения
+        }
+
+        console.log([...formData.entries()]);
+
         try {
             const response = await axios.post(
                 `${config.apiUrl}/boxes`,
+                formData,
                 {
-                    ...newBox,
-                    categories: selectedCategories,
-                },
-                { headers: { Authorization: `Bearer ${Cookies.get('token')}` } }
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
             );
-            // Обновление списка боксов
             setBoxes((prevBoxes) => [response.data.box, ...prevBoxes]);
         } catch (error) {
+            console.error("Server Error:", error.response?.data);
             console.error('Error creating box:', error);
             setError('Не удалось создать бокс.');
         }
     };
 
     // Редактирование бокса
-    const editBoxData = (box) => {
-        setEditBox(box);
+    const editBoxData = async (box) => {
+        if (!box) return; // Защита от вызова без аргумента
+        setEditBox(box); // Устанавливаем текущий бокс для редактирования
         setNewBox({
-            name: box.name,
-            description: box.description,
-            price: box.price,
-            active: box.active,
+            name: box.name || '',
+            description: box.description || '',
+            price: box.price || '',
+            active: box.active || '',
         });
-        setSelectedCategories(box.categories.map((category) => category.id));
-        formRef.current?.scrollIntoView({ behavior: 'smooth' });
+        setSelectedCategories(
+            box.categories?.map((category) => category.id) || [] // Защита от ошибок, если categories = null/undefined
+        );
+        setImagePreview(box.image || ''); // Устанавливаем превью текущего изображения
+        formRef.current?.scrollIntoView({ behavior: 'smooth' }); // Прокрутка к форме
     };
 
     // Обновление бокса
     const updateBox = async () => {
-        if (!editBox) return;
+        if (!editBox || !editBox.id) {
+            console.error('editBox or editBox.id is missing:', editBox);
+            setError('Не удалось обновить бокс: отсутствует ID.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("name", newBox.name);
+        formData.append("description", newBox.description);
+        formData.append("price", newBox.price);
+        formData.append("active", newBox.active);
+        selectedCategories.forEach((categoryId) => {
+            formData.append("categories[]", categoryId);
+        });
+        if (imageFile) {
+            formData.append("image", imageFile);
+        }
         try {
-            const response = await axios.put(
-                `${config.apiUrl}/admin/boxes/${editBox.id}`,
+            const response = await axios.post(
+                `${config.apiUrl}/admin/boxes/${editBox.id}?_method=PUT`,
+                formData,
                 {
-                    ...newBox,
-                    categories: selectedCategories,
-                },
-                { headers: { Authorization: `Bearer ${Cookies.get('token')}` } }
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('token')}`,
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
             );
 
-            // setBoxes((prevBoxes) =>
-            //     prevBoxes.map((box) => (box.id === response.data.box.id ? response.data.box : box))
-            // );
+            setBoxes((prevBoxes) => [response.data.box, ...prevBoxes]);
         } catch (error) {
             console.error('Error updating box:', error);
             setError('Не удалось обновить бокс.');
@@ -219,6 +264,19 @@ const BoxesManagement = () => {
                                             <option value="Активный">Активный</option>
                                             <option value="Неактивный">Неактивный</option>
                                         </select>
+                                    </div>
+                                    <div className={styles.itemContent}>
+                                        <label>Изображение</label>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageChange}
+                                        />
+                                        {imagePreview && (
+                                            <div className={styles.imagePreview}>
+                                                <img src={imagePreview} alt="Preview" className={styles.previewImage}/>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className={styles.itemContent}>
