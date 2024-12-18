@@ -4,6 +4,21 @@
     grid-template-columns: 250px auto;
 }
 
+.imagePreview {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.previewImage {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
 .boxAssemblyContainer {
     background-color: #f8f9fa;
     display: grid;

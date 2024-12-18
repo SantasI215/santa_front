@@ -58,14 +58,17 @@ const BoxList = ({ apiEndpoint, title }) => {
         console.log(boxes); // Проверяем, что данные содержат поле categories
     }, [boxes]);
 
-    const handleFilterChange = (selectedCategories) => {
-        if (selectedCategories.length === 0) {
-            setFilteredBoxes(boxes); // Показываем все боксы, если фильтры не выбраны
-        } else {
-            const filtered = boxes.filter(box =>
-                box.categories.some(category => selectedCategories.includes(category.id)) // Проверяем связь
-            );
-            setFilteredBoxes(filtered);
+    const handleFilterChange = async (selectedCategories) => {
+        try {
+            const params = selectedCategories.length > 0
+                ? { categories: selectedCategories.join(",") }
+                : {};
+
+            const response = await axios.get(`${config.apiUrl}/${apiEndpoint}`, { params });
+
+            setFilteredBoxes(response.data);
+        } catch (error) {
+            console.error("Ошибка при фильтрации боксов:", error);
         }
     };
 
@@ -89,7 +92,12 @@ const BoxList = ({ apiEndpoint, title }) => {
                         <li key={box.id} className={styles.boxItem}>
                             <Link href={`/boxes/${box.id}`}>
                                 <div className={styles.boxInfo}>
-                                    <Image src={BoxImage} alt={box.name}/>
+                                    <Image
+                                        src={box.image ? `${config.url}/storage/${box.image}` : BoxImage}
+                                        alt={box.name}
+                                        width={200}
+                                        height={200}
+                                    />
                                     <p>{box.name}</p>
                                 </div>
                             </Link>
