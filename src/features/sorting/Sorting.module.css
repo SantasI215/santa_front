@@ -1,0 +1,33 @@
+.sorting {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin: var(--spacing) 3rem 0;
+}
+
+.item__sorting {
+    cursor: pointer;
+    position: relative;
+}
+
+.active::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 11px;
+    background-image: url('../../assets/img/sorting-arrow.svg');
+    background-size: cover;
+    position: absolute;
+    top: 50%;
+    left: -25px;
+    transform: translateY(-50%);
+}
+
+li.active:not(li:first-child) {
+    margin-left: 10px;
+}
+
+.active.desc::before {
+    rotate: 180deg;
+    top: 10%;
+}
