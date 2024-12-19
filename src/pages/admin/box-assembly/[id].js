@@ -11,6 +11,8 @@ const BoxAssembly = () => {
     const { id } = router.query;
     const [boxData, setBoxData] = useState(null);
     const [suggestedItems, setSuggestedItems] = useState([]);
+    const [missingCategories, setMissingCategories] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
     const [totalPrice, setTotalPrice] = useState(0);
     const [loading, setLoading] = useState(true);
     const [allItemsAdded, setAllItemsAdded] = useState(false);
@@ -57,7 +59,14 @@ const BoxAssembly = () => {
                 });
 
                 setSuggestedItems(suggestionsResponse.data.suggestions);
+                setMissingCategories(suggestionsResponse.data.missing_categories || []);
                 setTotalPrice(suggestionsResponse.data.total_price);
+
+                if (suggestionsResponse.data.error) {
+                    setErrorMessage(suggestionsResponse.data.error);
+                } else {
+                    setErrorMessage('');
+                }
             }
 
             setLoading(false);
@@ -125,6 +134,17 @@ const BoxAssembly = () => {
 
                     <div className={styles.container}>
                         <h3>Товары для сборки:</h3>
+                        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+                        {missingCategories.length > 0 && (
+                            <div style={{ marginTop: '1rem' }}>
+                                <h3>Не хватает товаров в категориях:</h3>
+                                <ul>
+                                    {missingCategories.map((category) => (
+                                        <li key={category.id}>{category.name} (ID: {category.id})</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                         <div className={styles.tableContainer}>
                             <table className={styles.table}>
                                 <thead>

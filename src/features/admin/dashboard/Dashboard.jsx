@@ -11,6 +11,8 @@ import CategoriesManagement from '@/features/admin/categories/CategoriesManageme
 import BoxesManagement from '@/features/admin/boxes/BoxesManagement';
 import OrdersManagement from "@/features/admin/orders/OrdersManagement";
 import HistoryOrdersManagement from "@/features/admin/historyOrders/HistoryOrdersManagement";
+import HomePage from "@/pages/index.js";
+import Link from "next/link";
 
 const Dashboard = () => {
     const router = useRouter();
@@ -62,6 +64,8 @@ const Dashboard = () => {
 
     const renderComponent = () => {
         switch (activeComponent) {
+            case 'history-orders':
+                return <HistoryOrdersManagement />;
             case 'users':
                 return <UsersManagement />;
             case 'items':
@@ -70,8 +74,8 @@ const Dashboard = () => {
                 return <CategoriesManagement />;
             case 'boxes':
                 return <BoxesManagement />;
-            case 'history-orders':
-                return <HistoryOrdersManagement />;
+            case 'home-page':
+                return <HomePage />;
             case 'orders':
                 if (userData?.role === 'collector') {
                     return <OrdersManagement />;
@@ -142,9 +146,16 @@ const Dashboard = () => {
                 )}
                 {userData?.role === 'admin' && (
                     <button
-                    className={`${styles.navButton} ${activeComponent === 'history-orders' ? styles.active : ''}`}
-                    onClick={() => setActiveComponent('history-orders')}>
+                        className={`${styles.navButton} ${activeComponent === 'history-orders' ? styles.active : ''}`}
+                        onClick={() => setActiveComponent('history-orders')}>
                         История заказов
+                    </button>
+                )}
+                {userData?.role === 'admin' && (
+                    <button className={`${styles.navButton} ${activeComponent === 'home-page' ? styles.active : ''}`}>
+                        <Link href='/'>
+                            Вернуться к сайту
+                        </Link>
                     </button>
                 )}
                 {userData?.role === 'collector' && (
